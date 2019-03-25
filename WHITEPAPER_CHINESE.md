@@ -1,6 +1,6 @@
 # Livepeer 白皮书
 
-**Protocol and Economic Incentives For a Decentralized Live Video Streaming Network**
+**去中心化视频流媒体网络-协议和经济激励**
 
 Doug Petkanics <doug@livepeer.org>  
 Eric Tang <eric@livepeer.org>
@@ -420,7 +420,7 @@ Current platforms such as Twitter and Facebook provide amazing live video soluti
 
 Decentralized apps (DApps) are beginning to emerge, driven largely by the Ethereum ecosystem. However, to date there hasn't been a viable solution for embedding live video within a DApp without using a centralized solution or limiting the number of consuming clients based on the constraints of WebRTC. By introducing Livepeer to the stack, an application can be fully decentralized, yet still contain live video, at scale, to as many users as wish to consume it.
 
-## Summary ###########################################
+## 总结 ###########################################
 
 In summary, the Livepeer protocol incentivizes nodes to contribute their processing and bandwidth to the network in service of transcoding and distributing live video. The verification of work is solved by a scalable extension on top of the Truebit protocol which incentivizes nodes to perform transcoding operations correctly in order to earn their fees and token allocations and preserve their value earning role as a transcoder. The gamification of the network and false work problem is solved via the economics of the delegated proof of stake block reward accounting. It becomes more economically rational to simply stake one's tokens towards a value adding node than to pay fees into the network to be distributed to other delegators when performing work that there wasn't actually real demand for.
 
@@ -428,7 +428,7 @@ The end result is a scalable, pay-as-you-go network for decentralized live video
 
 ## Appendix ###########################################
 
-### Livepeer Protocol Parameter Reference
+### Livepeer协议参数引用
 
 | Parameter Name | Description | Example Value |
 |----|------|---|
@@ -450,7 +450,7 @@ The end result is a scalable, pay-as-you-go network for decentralized live video
 | `FinderFee` | % of slash amount that the finder will receive as compensation. | 5% |
 | `SlashingPeriod` | The deadline for invoking a slashing condition after the `VerificationPeriod` has completed. | 1 hour |
 
-### Livepeer Protocol Transaction Types
+### Livepeer协议事务类型
 
 | Transaction | Description |
 |----|------|
@@ -471,7 +471,7 @@ The end result is a scalable, pay-as-you-go network for decentralized live video
 | `UpdateDelegatorStake()` | This allows a delegator to claim their fees + token allocation from previous rounds. It's invoked automatically through unbonding and bonding, but it serves as a failsafe in case the delegator would like to update without changing state. |
 | `*GovernanceTransactions()` | TBD  |
 
-## References ###########################################
+## 参考文献 ###########################################
 
 1. Ethereum White Paper - Vitalik Buterin - Ethereum Wiki - <https://github.com/ethereum/wiki/wiki/White-Paper>
 2. Fat Protocols - Joel Monegro - USV Blog - <http://www.usv.com/blog/fat-protocols>

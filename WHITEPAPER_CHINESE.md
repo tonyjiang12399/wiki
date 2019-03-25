@@ -1,4 +1,4 @@
-# Livepeer Whitepaper
+# Livepeer 白皮书
 
 **Protocol and Economic Incentives For a Decentralized Live Video Streaming Network**
 

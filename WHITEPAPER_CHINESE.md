@@ -176,7 +176,7 @@ A node indicates their willingness to be a transcoder by submitting a `Transcode
 - `BlockRewardCut`: The % of the block reward that bonded nodes will pay them for the service of transcoding. (Example 2%. If a bonded node were to receive 100 LPT in block reward, then 2 LPT to the transcoder).
 - `FeeShare`: The % of the fees from broadcasting jobs that the transcoder is willing to share with the bonded nodes who delegate towards it. (Example 25%. If a transcoder were to receive 100 ETH in fees, they would pay 25 ETH to the bonded nodes).
 
-The Transcoder can update their availability and information up until `RoundLockAmount` time before the next transcoding round. This is offered as a % of the round. (Example 10% == 2.4 hours. They can change this information until 2.4 hours before the next transcoding round which lasts for `RoundLength` 1 day). This gives bonded nodes the chance to review the fee splits and token reward splits relative to other transcoders, as well as anticipated fees based upon the rate they're charging and network demand, and move their delegated stake if they wish. At the start of a transcoding round (triggered by a call to the `InitializeRound()` transaction), the active transcoders for that round are determined based upon the total stake delegated towards each transcoder, and stakes and rates are locked in for the duration of that round.
+The Transcoder can update their availability and information up until `RoundLockAmount` time before the next transcoding round. This is offered as a % of the round. (Example 10% == 2.4小时. They can change this information until 2.4小时 before the next transcoding round which lasts for `RoundLength` 1 day). This gives bonded nodes the chance to review the fee splits and token reward splits relative to other transcoders, as well as anticipated fees based upon the rate they're charging and network demand, and move their delegated stake if they wish. At the start of a transcoding round (triggered by a call to the `InitializeRound()` transaction), the active transcoders for that round are determined based upon the total stake delegated towards each transcoder, and stakes and rates are locked in for the duration of that round.
 
 There is one change that is allowed during the `RoundLockPeriod`: The lowest offered price/segment for any of the candidate transcoders is locked in and can't be moved, but other transcoder candidates can adjust their price/segment downwards. This allows them to match the lowest offered price on the network if they wish in order to guarantee their stake-weighted share of work on the network. They are not allowed to move their offered price upwards during this period.
 
@@ -434,12 +434,12 @@ The end result is a scalable, pay-as-you-go network for decentralized live video
 |----|------|---|
 | `T` | Segment length in seconds | 2 seconds |
 | `N` | Number of active transcoders | 144 |
-| `RoundLength` | Length of time between election of a new round of transcoders | 1 day |
+| `RoundLength` | Length of time between election of a new round of transcoders | 1天 |
 | `InflationRate` | The current target inflation rate per round of LPT. (Moves algorithmically). | .04% (equivalent to 15%/year) |
 | `ParticipationRate` | The target percent of token bonded vs liquid. | 50% |
-| `RoundLockAmount` | Transcoders rates lock in for this percentage of a round at the end of a round so that delegators can review and delegate accordingly without worrying about last minute rate changes. | 10% == 2.4 hours |
-| `UnbondingPeriod` | Time between entering unbonding state, and ability to withdraw the funds. | 1 month |
-| `VerificationPeriod` | The deadline for verifying a job claim after submission of the job claim. This also serves as the minimum period that a receipt of data persistence must be provided in the decentralized storage solution. | 6 hours |
+| `RoundLockAmount` | Transcoders rates lock in for this percentage of a round at the end of a round so that delegators can review and delegate accordingly without worrying about last minute rate changes. | 10% == 2.4小时 |
+| `UnbondingPeriod` | Time between entering unbonding state, and ability to withdraw the funds. | 1个月 |
+| `VerificationPeriod` | The deadline for verifying a job claim after submission of the job claim. This also serves as the minimum period that a receipt of data persistence must be provided in the decentralized storage solution. | 6小时 |
 | `VerificationRate` | The % of segments that will be verified. | 1/500 |
 | `FailedVerificationSlashAmount` | % to slash in the case of a failed verification (beyond the potential allowed failure threshold) | 5% |
 | `MissedRewardSlashAmount` | % to slash in the case of missing a block reward round (Maybe only do this in the case of n consecutive misses) | 3% |
@@ -448,7 +448,7 @@ The end result is a scalable, pay-as-you-go network for decentralized live video
 | `*SlashingThresholds` (TBD) | Placeholder to indicate that we may not slash on all failures, only if they exceed some threshold % of failure rate. | |
 | `VerificationFailureThreshold` | % of verifications you can fail without being slashed. Useful because of external dependencies like Swarm/Truebit that could cause sporadic failure. | 1% |
 | `FinderFee` | % of slash amount that the finder will receive as compensation. | 5% |
-| `SlashingPeriod` | The deadline for invoking a slashing condition after the `VerificationPeriod` has completed. | 1 hour |
+| `SlashingPeriod` | The deadline for invoking a slashing condition after the `VerificationPeriod` has completed. | 1小时 |
 
 ### Livepeer协议事务类型
 

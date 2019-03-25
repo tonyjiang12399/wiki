@@ -432,7 +432,7 @@ The end result is a scalable, pay-as-you-go network for decentralized live video
 
 | Parameter Name | Description | Example Value |
 |----|------|---|
-| `T` | Segment length in seconds | 2 seconds |
+| `T` | Segment length in seconds | 2秒钟 |
 | `N` | Number of active transcoders | 144 |
 | `RoundLength` | Length of time between election of a new round of transcoders | 1天 |
 | `InflationRate` | The current target inflation rate per round of LPT. (Moves algorithmically). | .04% (equivalent to 15%/year) |

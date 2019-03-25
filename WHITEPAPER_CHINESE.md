@@ -452,7 +452,7 @@ The end result is a scalable, pay-as-you-go network for decentralized live video
 
 ### Livepeer协议事务类型
 
-| Transaction | Description |
+| 事务 | 描述 |
 |----|------|
 | `Bond()` | Bond stake towards a transcoder. |
 | `Unbond()` | Enter the unbonding state for the fixed `UnbondingPeriod`. |
@@ -467,9 +467,9 @@ The end result is a scalable, pay-as-you-go network for decentralized live video
 | `DistributeFees()` | Transcoder claims the fees for a particular claim after verification. |
 | `Reward()` | Does all the verifications on chain to either slash or distribute token allocations. Can only be invoked by a transcoder who is active in the current round, once per round. |
 | `Verify()` | Transcoder provides the transcode claims for segments which will be verified along with merkle proofs for comparison with merkle root from `ClaimWork()`. Explicitly call Truebit to perform verification. |
-| `InitializeRound()` | This transaction needs to be invoked once after the new round's start block to initialize the new active transcoder pool. |
-| `UpdateDelegatorStake()` | This allows a delegator to claim their fees + token allocation from previous rounds. It's invoked automatically through unbonding and bonding, but it serves as a failsafe in case the delegator would like to update without changing state. |
-| `*GovernanceTransactions()` | TBD  |
+| `InitializeRound()` | 在新一轮的起始块之后需要调用此事务一次以初始化新的活动的转码转换器池。 |
+| `UpdateDelegatorStake()` | 这允许委托人从前几轮申请他们的费用+代币分配。 它通过非绑定和绑定自动调用，但如果委托者想要在不改变状态的情况下更新它，它就可以作为故障保护。 |
+| `*GovernanceTransactions()` | 待定  |
 
 ## 参考文献 ###########################################
 

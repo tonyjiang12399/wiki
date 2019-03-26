@@ -454,19 +454,19 @@ The end result is a scalable, pay-as-you-go network for decentralized live video
 
 | 事务 | 描述 |
 |----|------|
-| `Bond()` | Bond stake towards a transcoder. |
-| `Unbond()` | Enter the unbonding state for the fixed `UnbondingPeriod`. |
-| `Transcoder()` | Declare your intentions as a transcoder. |
-| `ResignAsTranscoder()` | Resign your intentions as a transcoder. |
-| `TranscodeAvailability()` | This transcoder is currently open to accepting another job. They’re in the pool to be assigned randomly on new job submissions. |
-| `Job()` | Submit a transcoding job on chain. |
-| `EndJob()` | End the job to relinquish transcoding responsibility. |
-| `Deposit()` | Submit a deposit on chain that will be used and drawn against to pay for jobs. |
-| `Withdraw()` | Withdraw from deposit and unbonded stake. |
-| `ClaimWork()` | End the transcode job and make the claim of which segments you can prove you’ve transcoded via segment range and merkle root. |
-| `DistributeFees()` | Transcoder claims the fees for a particular claim after verification. |
-| `Reward()` | Does all the verifications on chain to either slash or distribute token allocations. Can only be invoked by a transcoder who is active in the current round, once per round. |
-| `Verify()` | Transcoder provides the transcode claims for segments which will be verified along with merkle proofs for comparison with merkle root from `ClaimWork()`. Explicitly call Truebit to perform verification. |
+| `Bond()` | 绑定权益对转码器的影响。 |
+| `Unbond()` | 输入固定的未绑定状态 `UnbondingPeriod`. |
+| `Transcoder()` | 声明你的意图作为代码转换器。 |
+| `ResignAsTranscoder()` | 将您的意图作为转码器辞职。 |
+| `TranscodeAvailability()` | 此转码器目前可以接受另一项工作。 他们在池中随机分配新工作。 |
+| `Job()` | 在链上提交转码作业。 |
+| `EndJob()` | 结束工作以放弃转码责任。 |
+| `Deposit()` | 提交链条上的存款，用于支付工作。 |
+| `Withdraw()` | 退出存款和未绑定的权益。 |
+| `ClaimWork()` | 结束转码工作并声明您可以证明您已经通过段范围和merkle root.take转码的段。 |
+| `DistributeFees()` | Transcoder在验证后声明特定索赔的费用。 |
+| `Reward()` | 链上的所有验证是否会削减或分配令牌分配。 只能由在当前轮次中活动的代码转换器调用，每轮一次。 |
+| `Verify()` | 转码器提供段的转码声明，这些声明将与merkle证明一起进行验证，以便与merkle root进行比较 `ClaimWork()`。 明确调用Truebit执行验证。|
 | `InitializeRound()` | 在新一轮的起始块之后需要调用此事务一次以初始化新的活动的转码转换器池。 |
 | `UpdateDelegatorStake()` | 这允许委托人从前几轮申请他们的费用+代币分配。 它通过非绑定和绑定自动调用，但如果委托者想要在不改变状态的情况下更新它，它就可以作为故障保护。 |
 | `*GovernanceTransactions()` | 待定  |

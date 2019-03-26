@@ -108,15 +108,15 @@ The Livepeer protocol generally uses segments as the unit of work for transcodin
 
 ### Livepeer令牌
 
-The Livepeer Token (LPT) is the protocol token of the Livepeer network. But it is not the medium of exchange token. Broadcasters use Ethereum's Ether (ETH) to broadcast video on the network. Nodes who contribute processing and bandwidth earn ETH in the form of fees from broadcasters. LPT is a staking token that participants who want to perform work on the network stake in order to coordinate how work gets distributed on the network, and to provide security that the work will get done honestly and correctly. LPT has the following purposes:
+Livepeer Token（LPT）是Livepeer网络的协议令牌。 但它不是交换令牌的媒介。 广播公司使用以太坊的以太网（ETH）在网络上播放视频。 贡献处理和带宽的节点以广播公司的费用形式获得ETH。 LPT是一种权益令牌，参与者希望在网络上进行工作，以协调工作在网络上的分配方式，并提供安全性，确保工作能够诚实正确地完成。 LPT具有以下目的：
 
-- It serves as a bonding mechanism in a delegated proof of stake system, in which stake is delegated towards transcoders (or validators) who participate in the protocol to transcode video and validate work. The token, and potential slashing that occurs due to protocol violation, is necessary in order to secure the network against a number of attacks. More below.
-- It routes work through the network in proportion to the amount of staked and delegated token, essentially serving as a coordination mechanism.
-- It is a unit of account that is specific to the Livepeer ecosystem, which forms the basis of a SectorCoin concept, applicable to additional functionality to be introduced in the future [[4](#references)]. Services such as DVR, closed captioning, ad insertion/monetization, and analytics can all plug into the Livepeer ecosystem and potentially make use of the security provided by staking LPT.
+- 它作为委托证明利益系统中的绑定机制，其中利益被委托给参与协议的转码器（或验证器）以转码视频和验证工作。 由于协议违规而发生的令牌和潜在的削减是必要的，以便保护网络免受许多攻击。 更多下面。
+- 它通过网络路由工作的比例与权益和委托令牌的数量成比例，基本上作为协调机制。
+- 它是一个特定于Livepeer生态系统的帐户单元，它构成了SectorCoin概念的基础，适用于将来引入的其他功能[[4]（＃references）]。 DVR，隐藏式字幕，广告插入/货币化和分析等服务都可以插入Livepeer生态系统，并可能利用LPT提供的安全性。
 
-An initial allocation of Livepeer Token will be distributed so that stakeholders can fulfill various roles in, and use the network, and then additional token will be issued according to algorithmically programmed issuance over time. See the [Token Distribution](#token-distribution) section.
+将分发Livepeer令牌的初始分配，以便利益相关者可以在网络中履行各种角色并使用网络，然后将根据随时间推移的算法编程发布附加令牌。 请参阅[令牌分布]（＃令牌分发）部分。
 
-Following the conventions of Ethereum and many popular ERC20 tokens [[16](#references)], LPT will be divisible by 10 ^ 18, with larger denominations such as the LPT itself intended to be used for user level transactions such as staking, and smaller denominations intended to be used for protocol accounting.
+遵循以太坊和许多流行的ERC20令牌[[16]（＃references）]的惯例，LPT将被10 ^ 18整除，较大的面额如LPT本身旨在用于诸如放样的用户级交易，以及 旨在用于协议会计的较小面额。
 
 ### Protocol Roles
 

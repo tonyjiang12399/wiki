@@ -426,29 +426,29 @@ In summary, the Livepeer protocol incentivizes nodes to contribute their process
 
 The end result is a scalable, pay-as-you-go network for decentralized live video broadcast - a missing layer in the web3 stack that Livepeer seeks to fill.
 
-## Appendix ###########################################
+## 附录 ###########################################
 
 ### Livepeer协议参数引用
 
-| Parameter Name | Description | Example Value |
+| 参数名称 | 描述 | 示例值 |
 |----|------|---|
-| `T` | Segment length in seconds | 2秒钟 |
-| `N` | Number of active transcoders | 144 |
-| `RoundLength` | Length of time between election of a new round of transcoders | 1天 |
-| `InflationRate` | The current target inflation rate per round of LPT. (Moves algorithmically). | .04% (equivalent to 15%/year) |
-| `ParticipationRate` | The target percent of token bonded vs liquid. | 50% |
-| `RoundLockAmount` | Transcoders rates lock in for this percentage of a round at the end of a round so that delegators can review and delegate accordingly without worrying about last minute rate changes. | 10% == 2.4小时 |
-| `UnbondingPeriod` | Time between entering unbonding state, and ability to withdraw the funds. | 1个月 |
-| `VerificationPeriod` | The deadline for verifying a job claim after submission of the job claim. This also serves as the minimum period that a receipt of data persistence must be provided in the decentralized storage solution. | 6小时 |
-| `VerificationRate` | The % of segments that will be verified. | 1/500 |
-| `FailedVerificationSlashAmount` | % to slash in the case of a failed verification (beyond the potential allowed failure threshold) | 5% |
-| `MissedRewardSlashAmount` | % to slash in the case of missing a block reward round (Maybe only do this in the case of n consecutive misses) | 3% |
-| `MissedVerificationSlashAmount` | % to slash in the case the transcoder didn’t call verification | 10% |
-| `CompetitivenessTolerance` | If all transcoders were always available and set the same price and fees, they would receive work in proportion to their stake. This parameter sets a % that they have to be within this target work % to be eligible for token allocation. This prevents transcoders from doing very little share of work relative to their stake. | 90% (extreme example. With 100 transcoders and 100,000 segments, this means I am ok if I only did 100 segments (10% of the 1000 I was supposed to do)). |
-| `*SlashingThresholds` (TBD) | Placeholder to indicate that we may not slash on all failures, only if they exceed some threshold % of failure rate. | |
-| `VerificationFailureThreshold` | % of verifications you can fail without being slashed. Useful because of external dependencies like Swarm/Truebit that could cause sporadic failure. | 1% |
-| `FinderFee` | % of slash amount that the finder will receive as compensation. | 5% |
-| `SlashingPeriod` | The deadline for invoking a slashing condition after the `VerificationPeriod` has completed. | 1小时 |
+| `T` | 段长度，以秒为单位 | 2秒钟 |
+| `N` | 活动代码转换器的数量 | 144 |
+| `RoundLength` | 选举新一轮转码器之间的时间长度 | 1天 |
+| `InflationRate` | 目前每轮LPT的目标通胀率。 （以算法方式移动）。 | .04% (equivalent to 15%/year) |
+| `ParticipationRate` | 令牌绑定与流动的目标百分比。 | 50% |
+| `RoundLockAmount` | 转码器在一轮结束时锁定一轮的这一百分比，以便委托人可以相应地审查和委派，而不必担心最后一刻的费率变化。 | 10% == 2.4小时 |
+| `UnbondingPeriod` | 进入无约束状态和提取资金的能力之间的时间。 | 1个月 |
+| `VerificationPeriod` | 提交工作索赔后验证工作索赔的截止日期。 这也是在去中心化存储解决方案中必须提供数据持久性接收的最短期限。 | 6小时 |
+| `VerificationRate` | 将要验证的细分的百分比。 | 1/500 |
+| `FailedVerificationSlashAmount` | 在验证失败的情况下减少百分比（超出潜在的允许故障阈值） | 5% |
+| `MissedRewardSlashAmount` | 在缺少一个块奖励回合的情况下减少百分比（也许只在n次连续失误的情况下这样做） | 3% |
+| `MissedVerificationSlashAmount` | 如果代码转换器没有调用验证，则减少百分比 | 10% |
+| `CompetitivenessTolerance` | 如果所有代码转换器始终可用并设置相同的价格和费用，那么它们将按照其利益的比例接收工作。 此参数设置％必须在此目标工作％内才有资格进行令牌分配。 这可以防止代码转换器相对于它们的股份做很少的工作。 | 90％（极端的例子。有100个代码转换器和100,000个分段，这意味着如果我只做了100个分段（我应该做的1000分的10％），我就可以了）。 |
+| `*SlashingThresholds` (TBD) | 占位符表示我们可能不会减少所有故障，只要它们超过故障率的某个阈值百分比。| |
+| `VerificationFailureThreshold` | 您可以在不被削减的情况下失败的验证百分比。 有用，因为Swarm / Truebit等外部依赖可能会导致偶发故障。 | 1% |
+| `FinderFee` | 发现者将收到的斜线数量的百分比作为补偿。 | 5% |
+| `SlashingPeriod` | 在“验证期”完成后调用斜杠条件的截止日期。 | 1小时 |
 
 ### Livepeer协议事务类型
 

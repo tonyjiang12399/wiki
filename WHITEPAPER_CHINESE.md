@@ -422,9 +422,9 @@ Decentralized apps (DApps) are beginning to emerge, driven largely by the Ethere
 
 ## 总结 ###########################################
 
-In summary, the Livepeer protocol incentivizes nodes to contribute their processing and bandwidth to the network in service of transcoding and distributing live video. The verification of work is solved by a scalable extension on top of the Truebit protocol which incentivizes nodes to perform transcoding operations correctly in order to earn their fees and token allocations and preserve their value earning role as a transcoder. The gamification of the network and false work problem is solved via the economics of the delegated proof of stake block reward accounting. It becomes more economically rational to simply stake one's tokens towards a value adding node than to pay fees into the network to be distributed to other delegators when performing work that there wasn't actually real demand for.
+总之，Livepeer协议激励节点将其处理和带宽贡献给网络，以便为转码和分发实时视频服务。 通过Truebit协议之上的可扩展扩展来解决工作验证，该扩展可以激励节点正确执行转码操作，以获得费用和令牌分配，并保留其作为代码转换器的价值收益角色。 网络的游戏化和虚假工作问题通过委托块奖励会计的委托证明的经济学来解决。 简单地将一个标记放入增值节点比在网络上支付费用以便在执行实际上没有实际需求的工作时分配给其他委托人变得更加经济合理。
 
-The end result is a scalable, pay-as-you-go network for decentralized live video broadcast - a missing layer in the web3 stack that Livepeer seeks to fill.
+最终结果是一个可扩展的，即用即付的网络，用于去中心化的实时视频广播 - 这是Livepeer试图填补的web3堆栈中的缺失层。
 
 ## 附录 ###########################################
 

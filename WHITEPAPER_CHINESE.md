@@ -325,9 +325,9 @@ At the launch of the network, token issuance will continue according to an infla
 
 The initial target for `InflationRate` will be set such that it aims to incentivize approximately `ParticipationRate` of the LPT to be bonded and actively participating [[19](#references)). For example, if `ParticipationRate` is 50% then incentives will exist to have half the oustanding token bonded. The inflation rate will move algorithmically each round to incent the participation target. A higher inflation rate would incent more token to be bonded, and a lower rate would lead to more people choosing liquidity rather than participation. It's this liquidity preference vs network ownership percentage tradeoff which should find equilibrium due to a number of economic factors in the network.
 
-### Governance
+### 治理
 
-The role of governance within the Livepeer protocol is intended to be three fold:
+Livepeer协议中的治理角色有三个方面：
 
 1. Determine the burning or appropriation of common funds which were slashed from misbehaving nodes.
 2. Adjust network parameters to ensure a healthy, thriving network which is valuable to broadcasters.
@@ -335,46 +335,47 @@ The role of governance within the Livepeer protocol is intended to be three fold
 
 Many of the network parameters referenced in this document such as `UnbondingPeriod`, `RoundLength`, `ParticipationRate`, and `VerificationRate` are adjustable. Proposals for adjustments to these parameters can be submitted, and the governance process, including voting by transcoders in proportion to their delegated stake, will determine adoption of these changes automatically within the protocol. The detailed spec for governance is left for another document. [See more here](https://github.com/livepeer/wiki/wiki/Governance). 
 
-## Attacks
+## 攻击
 
-This section contains a survey of the various ways that malicious actors may try to attack the Livepeer network. We use a rational attacker model in which the attacker makes decisions based upon their own economic self interest. A number of attacks are mitigated via it being unprofitable to conduct such attacks, but we also strive to ensure that at the worst the network suffers decrease of efficiency in the case of a sustained unprofitable attack, and doesn't suffer a failure.
+本节包含对恶意行为者可能试图攻击Livepeer网络的各种方式的调查。 我们使用理性攻击者模型，攻击者根据自己的经济自身利益做出决策。 由于进行此类攻击无利可图，因此可以减轻许多攻击，但我们也努力确保在最坏的情况下，网络在持续无利可图的攻击中遭受效率降低，并且不会遭受失败。
 
-### Consensus Attacks
+### 共识攻击
 
-As mentioned previously, consensus in the Livepeer ecosystem is provided by the underlying blockchain platform (Ethereum for example). 51% attacks, double spends of Livepeer Token, and forks of the network would require the same resources and cost-of-attack as Ethereum itself.
+如前所述，Livepeer生态系统的共识由底层区块链平台（例如以太坊）提供。 51％的攻击，Livepeer Token的双倍花费以及网络分支都需要与以太坊本身相同的资源和攻击成本。
 
-Livepeer is a staked based protocol, and while Transcoders have the role of participating in the work verification process and the token reward distribution process, they actually do not have the role of validating or accepting other Transcoders' work. There is no concept of a chain, nor is there validation of previous blocks. There simply exists the economic incentives to verify one's own work and distribute one's own portion of token allocations when it is one's turn. As such, attacks that are seen in a proof of stake protocols such as the Long Range Attack, the Nothing at Stake problem, and The Bribe Attack don't apply, as there is no opportunity to attempt to sign multiple blocks or attempt to create a longer chain from an earlier state. However, one should be aware that as the underlying blockchain migrates to proof of stake, these attacks do threaten to undermine Livepeer if the benefit of carrying them out on Livepeer were to exceed the cost of attack on Ethereum itself.
+Livepeer是一种基于赌注的协议，虽然转码器具有参与工作验证过程和令牌奖励分配过程的作用，但它们实际上不具有验证或接受其他转码器工作的作用。 没有链的概念，也没有先前块的验证。 简单地存在经济激励来验证自己的工作并在轮到它时分配一部分自己的令牌分配部分。 因此，在远程攻击，无任何问题和贿赂攻击等利益协议证明中看到的攻击不适用，因为没有机会尝试签署多个块或尝试创建 来自早期国家的较长链。 然而，人们应该意识到，当底层区块链迁移到股权证明时，如果在Livepeer上执行它们的好处超过对以太坊本身的攻击成本，这些攻击确实可能会破坏Livepeer。
 
-While relying on the security of the underlying blockchain is nice for prevention of consensus attacks, there still exists a class of quality and efficiency attacks that can harm the Livepeer network.
+虽然依赖底层区块链的安全性对于防止共识攻击很有帮助，但仍然存在一类可能损害Livepeer网络的质量和效率攻击。
 
 ### DDoS
 
-Denial of Service in Livepeer can go two ways:
+Livepeer中的拒绝服务有两种方式：
 
-1. A Transcoder can try to prevent or slow down a Broadcaster from getting their encoded stream out to the network by accepting a job but refusing to transcode.
-2. A Broadcaster can prevent a Transcoder from being able to do the job that they believe they were assigned by refusing to send them segments.
+1. 转码器可以尝试通过接受作业但拒绝转码来阻止或减慢广播公司将其编码流输出到网络。
+2. 广播公司可以通过拒绝发送段来阻止转码器执行他们认为已分配的作业。
 
-Both attacks have a cost and can be mitigated, with slight annoyance.
+这两种攻击都有成本，可以减轻，轻微的烦恼。
 
-In the first case, a Transcoder has to pay to claim their availability on chain. If they are not going to receive a fee because they didn't do the work, then they're throwing ETH away. The Broadcaster can just resubmit the job and be assigned a new Transcoder. One potential option for scalability is that the protocol can identify a number of valid Transcoders in priority order instead of just one, and this way the Broadcaster can just move on without another on chain transaction. Additionally, all stats about accepted jobs and average # of segments transcoded/job, etc, can be calculated from on-chain data, and delegators would use this as input into their decision about whom to delegate towards. Behave poorly and lose your role.
+在第一种情况下，Transcoder必须付费才能在链上声明其可用性。 如果他们因为不做这项工作而不会收取费用，那么他们就会把ETH扔掉。 广播公司可以重新提交作业并分配一个新的转码器。 可扩展性的一个潜在选择是协议可以按优先级顺序识别多个有效的代码转换器，而不仅仅是一个，这样，Broadcaster可以在没有其他链式事务的情况下继续前进。 此外，所有关于已接受作业的统计数据和转码/作业等的平均段数可以从链上数据计算，并且委托人将使用此作为他们决定委派给谁的决策的输入。 表现不佳将失去你的角色。
 
-In the case of a Broadcaster preventing a Transcoder from doing work, this is merely a capacity planning calculation. A Transcoding node can maintain records of its capacity for concurrent jobs, likelihood of a job being active/inactive, and ensure that it always believes it will have capacity for the work that it claims. Simply ignoring or calling `EndJob()` on a node that's refusing to send segments hardly hurts the Transcoder.
+在广播公司阻止转码器工作的情况下，这仅仅是容量规划计算。 转码节点可以维护其并发作业容量的记录，作业处于活动/不活动状态的可能性，并确保它始终认为它将具有其声明的工作容量。 简单地忽略或在拒绝发送段的节点上调用`EndJob（）`几乎不会损坏转码器。
 
-### Useless or Self Dealing Transcoder
+### 无用或自我处理转码器
 
-If a Transcoder has enough stake to maintain their position, they could theoretically list a 100% `BlockRewardCut`, 0% `FeeShare`, and charge a high `PricePerSegment` such that they would never have to do any work, yet could collect their token allocation. This is prevented by the `CompetitivenessTolerance` which requires them to contribute some amount of valid work. Additionally, because of the transaction costs of participating in the protocol incurred by Transcoders, it would be more profitable for them to simply stake their token toward a valid Transcoder who was sharing fees with them, than it would be to act as a useless Transcoder who would receive no fees to speak of.
+如果Transcoder有足够的权益来维持他们的位置，他们理论上可以列出100％的`BlockRewardCut`，0％`FeeShare`，并收取高的`PricePerSegment`，这样他们就不会做任何工作，但可以收集他们的 令牌分配。 这可以通过`CompetitivenessTolerance`来阻止，这需要他们提供一些有效的工作。 另外，由于转码器参与协议所产生的交易成本，对于他们简单地将他们的令牌放到与他们共享费用的有效转码器上比将其作为无用转码器的人更有利可图。 不会收到任何费用。
 
-A misbehaving Transcoder who is outputting invalid output would quickly get slashed down to the point of their stake being reduced too low to actually keep their job and receive any work.
+
+输出无效输出的行为不端的转码器很快就会被削减到他们的权益降低到太低以至于无法真正保住工作并接受任何工作的程度。
 
 ### 转码器恶意破坏
 
-If a Broadcaster wanted to make the protocol very expensive to operate for a transcoder, it could send transcoders non-consecutive segment numbers. This is because transcoders can claim work for a continuous range of segment numbers in a single transaction, but would have to make many transactions to claim work across random segment number ranges. This can be defended against by the following options:
+如果广播公司想要使协议编码的协议非常昂贵，它可以发送代码转换器非连续的段号。 这是因为代码转换器可以在单个事务中声明连续范围的段号，但是必须使许多事务在随机段号范围内声明工作。 这可以通过以下选项进行辩护：
 
-1. Transcoder calls `EndJob()` and doesn't bother doing the work or attempting to collect the fees. 
-2. Protocol implements on chain parsing or better segment claim encoding in order to reduce fees associated with claiming non-consecutive segments in a single call.
-3. Simply ignore the segments and never claim the work.
+1. 转码器调用`EndJob（）`并且不打扰做工作或试图收取费用。
+2. 协议实现链解析或更好的段索赔编码，以减少与在单个呼叫中声明非连续段相关联的费用。
+3. 简单地忽略细分，永远不要求工作。
 
-This attack has a high cost to a broadcaster since they must have a deposit and submit jobs on chain in order to even get assigned to a transcoder in the first place. They have the ability to make life annoying for a transcoder and potentially lose efficiency, but not cause damage to the network.
+这种攻击对广播公司来说成本很高，因为他们必须有存款并在链上提交作业，以便首先分配给代码转换器。 它们能够使代码转换器生命烦恼并可能降低效率，但不会对网络造成损害。
 
 ### 连锁重组
 

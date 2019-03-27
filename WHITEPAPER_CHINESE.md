@@ -366,7 +366,7 @@ If a Transcoder has enough stake to maintain their position, they could theoreti
 
 A misbehaving Transcoder who is outputting invalid output would quickly get slashed down to the point of their stake being reduced too low to actually keep their job and receive any work.
 
-### Transcoder Griefing
+### 转码器恶意破坏
 
 If a Broadcaster wanted to make the protocol very expensive to operate for a transcoder, it could send transcoders non-consecutive segment numbers. This is because transcoders can claim work for a continuous range of segment numbers in a single transaction, but would have to make many transactions to claim work across random segment number ranges. This can be defended against by the following options:
 
@@ -376,19 +376,19 @@ If a Broadcaster wanted to make the protocol very expensive to operate for a tra
 
 This attack has a high cost to a broadcaster since they must have a deposit and submit jobs on chain in order to even get assigned to a transcoder in the first place. They have the ability to make life annoying for a transcoder and potentially lose efficiency, but not cause damage to the network.
 
-### Chain Reorg
+### 连锁重组
 
-When a broadcaster submits a job to the Livepeer Smart Contract, the protocol uses the current block hash to determine which transcoder will be assigned the job. Reorganizations of the underlying blockchain can cause confusion in this scenario. While this is not "an attack" directly, a transcoder will be valid one second, and then upon reorganization, will no longer be valid. When a reorg is detected the broadcaster can either redirect the stream towards the new valid transcoder, or the protocol can detect uncle blocks that are included in the main chain, and consider a transcoder to be valid if an uncle block within a given threshold would have made them valid. 
+当广播公司向Livepeer Smart Contract提交作业时，协议使用当前块哈希来确定将为哪个转码器分配作业。在这种情况下，底层区块链的重组可能会引起混淆。 虽然这不是直接“攻击”，但代码转换器将在一秒内有效，然后在重组时将不再有效。 当检测到重组时，广播公司可以将流重定向到新的有效代码转换器，或者协议可以检测主链中包含的叔块，并且如果给定阈值内的叔块具有该代码块，则认为代码转换器是有效的 使它们有效。
 
-## Live Video Distribution ###########################################
+## 实时视频分发 ###########################################
 
-This whitepaper has largely focused on the economic incentives and protocol for ensuring proper transcoding of live video, which is necessary to support adaptive bitrate streaming and reach every device. But equally important is the distribution of video throughout the network so that it can be consumed with high quality and low latency. The economics of distribution rely on tit-for-tat bandwidth accounting as popularized by Bittorrent, and extended via protocols like SWAP [[13](#references)]. As a simplification, nodes pay to request a segment of video, and nodes get paid to serve a segment of video. If a node already has a segment and can serve it to multiple requestors, it is profitable. We call this type of node, a Relay node.
+本白皮书主要关注确保实时视频正确转码的经济激励和协议，这对于支持自适应比特率流并到达每个设备是必要的。 但同样重要的是在整个网络中分发视频，以便能够以高质量和低延迟消费。 分销经济依赖于Bittorrent推广的针锋相对的带宽计算，并通过SWAP [[13]（＃references）]等协议进行扩展。 作为简化，节点付费以请求一段视频，并且节点获得付费以服务一段视频。 如果一个节点已经有一个段并且可以将它提供给多个请求者，那么它是有利可图的。 我们将这种类型的节点称为中继节点。
 
-Different incentives exist when it comes to bandwidth for nodes playing different roles in the network.
+当涉及到在网络中扮演不同角色的节点的带宽时，存在不同的激励。
 
-* Consumers may be willing to exchange upstream bandwidth to serve the content to additional Consumers in exchange for being able to consume the video themselves free of charge. See systems like Webtorrent [[14](#references)].
-* Broadcasters serve as origin nodes and may want to charge for consumption of the video, or may want to subsidize the cost of bandwidth so that everyone can access their video for free.
-* Transcoders and Relay nodes are willing to provide bandwidth in service of distributing video as long as it is profitable. This is similar to the role of traditional CDNs.
+* 消费者可能愿意交换上游带宽以将内容提供给其他消费者，以换取能够免费自己消费视频。 请参阅Webtorrent [[14]（＃references）]等系统。
+* 广播公司作为原始节点，可能想要为视频的消费收费，或者可能想要补贴带宽成本，以便每个人都可以免费访问他们的视频。
+* 转码器和中继节点愿意为分发视频提供带宽，只要它是有利可图的。 这类似于传统CDN的作用。
 
 
 
@@ -400,25 +400,25 @@ Peer-to-peer CDNs have been shown to reduce 80-98% of bandwidth requirements on 
 
 As non-critical to the cryptoeconomics of the Livepeer protocol, the details are spared from this document, but the interested can [follow along here](https://github.com/livepeer/go-livepeer) with the development, and look for a future document addressing purely the video distribution protocol.
 
-## Use Cases ###########################################
+## 用例 ###########################################
 
-The Livepeer project is concerned with decentralizing one-to-many live video broadcast (multicast). This is the truest form of media distribution, as it allows a broadcaster to connect directly with their audience in a first-hand manner, free from alterations, after-the-fact interpretation, and spin. It gives everyone a platform to have a voice. Existing centralized solutions can suffer from censorship, third party control over user data/relationship/monetization, and inefficient cost structures around payment for the service. Here are some of the logical use cases for applications and services to be built on top of Livepeer.
+Livepeer项目关注的是去中心化一对多的直播视频广播（多播）。 这是最真实的媒体分发形式，因为它允许广播公司以第一手的方式直接与观众联系，不受改动，事后解释和旋转。 它为每个人提供了一个发声的平台。 现有的集中式解决方案可能遭受审查，第三方对用户数据/关系/货币化的控制，以及围绕服务支付的低效成本结构。 以下是在Livepeer之上构建应用程序和服务的一些逻辑用例。
 
-### Pay-As-You-Go Content Consumption
+### 即用即付内容消费
 
-With a transfer of value transaction baked into the protocol, it is now possible for broadcasters to charge viewers directly for the consumption of their live broadcast, without requiring a credit card, account, or control over user identity via a centralized platform. This has applications in education (pay to attend an online course), events (pay to view a concert or live sporting event), entertainment (pay to watch a gamer or performer's live stream), and many other use cases - all while preserving the privacy of the viewer, and allowing them to pay for only what they consume directly to the broadcaster.
+通过融合进协议中的价值转移交易，现在广播公司可以直接向观众收取其直播的消费，而无需通过集中平台对信用卡，账户或对用户身份的控制。 这适用于教育（付费参加在线课程），活动（付费观看音乐会或现场体育赛事），娱乐（付费观看游戏玩家或表演者的直播）以及许多其他用例 - 同时保留 观众的隐私，并允许他们只支付他们直接向广播公司消费的东西。
 
-### Auto-scaling Social Video Services
+### 自动缩放社交视频服务
 
-One of the challenges of building consumer video services today is scaling infrastructure to support the demand for the growing number of streams and growing number of consumers as new users are added. A service layer that easily lets developers begin building their video solution on top of the Livepeer Network, which will automatically scale to support any number of streams and viewers as they go, will be a welcome solution to infrastructure developers who would otherwise have to continue provisioning servers, licensing media servers, and efficiently manage resources to handle spikes.
+当今构建消费者视频服务的挑战之一是扩展基础设施，以支持随着新用户的增加而对越来越多的流和越来越多的消费者的需求。 一个服务层可以轻松地让开发人员开始在Livepeer网络之上构建他们的视频解决方案，该网络将自动扩展以支持任意数量的流和观看者，这将是基础设施开发人员的一个受欢迎的解决方案，否则他们将不得不继续配置服务器，媒体许可服务器，以及有效管理资源以处理峰值。
 
-### Uncensorable Live Journalism
+### 不知不觉的现场新闻
 
-Current platforms such as Twitter and Facebook provide amazing live video solutions for reaching a large audience, but they're also the first to get blocked or censored in a variety of political conflict situations. Use of a decentralized network such as Livepeer would render it nearly impossible to prevent the word from getting out as to what is really going on on the ground in realtime.
+Twitter和Facebook等现有平台为大量受众提供了令人惊叹的实时视频解决方案，但它们也是第一个在各种政治冲突情况下被封锁或审查的平台。 使用像Livepeer这样的去中心化网络几乎不可能阻止实际上正在发生的事情。
 
-### Video Enabled DApps
+### 视频启用的DApps
 
-Decentralized apps (DApps) are beginning to emerge, driven largely by the Ethereum ecosystem. However, to date there hasn't been a viable solution for embedding live video within a DApp without using a centralized solution or limiting the number of consuming clients based on the constraints of WebRTC. By introducing Livepeer to the stack, an application can be fully decentralized, yet still contain live video, at scale, to as many users as wish to consume it.
+去中心化应用程序（DApps）开始出现，主要由以太坊生态系统驱动。 然而，到目前为止，还没有一种可行的解决方案，可以在不使用集中式解决方案的情况下，在DApp中嵌入实时视频，或者根据WebRTC的限制来限制消费客户端的数量。 通过将Livepeer引入堆栈，应用程序可以完全去中心化，但仍然包含大规模的实时视频，以及尽可能多的用户希望消费它。。
 
 ## 总结 ###########################################
 

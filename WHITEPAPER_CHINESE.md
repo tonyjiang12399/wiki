@@ -53,23 +53,23 @@ Livepeer项目旨在提供完全去中心化，高度可扩展，和加密令牌
 
 ## 介绍和背景 ###########################################
 
-The vision of the decentralized web has begun to be realized over the past couple years with the emergence of networks like [Ethereum](http://ethereum.org) to enable trustless computing, [Swarm](http://swarm-gateways.net/bzz:/theswarm.eth/) and [IPFS/Filecoin](http://ipfs.io) to enable decentralized storage and content distribution, Bitcoin and various token projects to facilitate p2p transfer of value, and decentralized name registries like [Blockstack](http://blockstack.org) and [ENS](http://ens.readthedocs.io/en/latest/introduction.html) to provide human accessible names to content and identities. These elements form the basis for decentralized applications (DApps) to be built in the form of largely static or infrequently updated web or mobile content, but at the moment DApps still lack the ability to include streaming media and data in an open and decentralized way. The goal of the Livepeer project is to decentralize live video broadcast over the internet.
+在过去几年中，随着[以太坊](http://ethereum.org)等网络的出现，分布式网络的愿景开始实现，以实现无信任计算，[Swarm](http://swarm-gateways.net/bzz:/theswarm.eth/)和[IPFS / Filecoin](http://ipfs.io)启用去中心化存储和内容分发，比特币和各种令牌项目，以促进p2p价值转移，以及分散名称注册 比如[Blockstack](http://blockstack.org)和[ENS](http://ens.readthedocs.io/en/latest/introduction.html)，为内容和身份提供人类可访问的名称。 这些元素构成了去中心化应用程序（DApps）的基础，这些应用程序以大部分静态或不经常更新的Web或移动内容的形式构建，但目前DApps仍然缺乏以开放和去中心化方在对流媒体和数据的能力上。 Livepeer项目的目标是通过互联网去中心化实时视频广播。
 
-The [Livepeer Project Overview](https://github.com/livepeer/wiki/wiki/Project-Overview) provides a nice introduction to the current state of live video on the internet. This whitepaper will largely focus on the cryptoeconomic protocol details of Livepeer, rather than the business case, but in summary the overview describes the current state of live streaming as growing at a rapid pace, centralized, and expensive. On the other hand, a fully decentralized P2P solution, where nodes contributed their own computation and bandwidth in service of streaming live video would be more open and scalable, as there would be no limit to the number of connections that could be served.
+[Livepeer Project Overview](https://github.com/livepeer/wiki/wiki/Project-Overview)提供了对互联网上现场视频当前状态的精彩介绍。 本白皮书将主要关注Livepeer的加密经济协议细节，而不是业务案例，但总的来说，概述描述了实时流式传输的快速增长，集中化和昂贵的现状。 另一方面，完全分散的P2P解决方案，其中节点贡献他们自己的计算和用于流直播视频的带宽将更加开放和可扩展，因为可以服务的连接数量没有限制。
 
-This technology is certainly available to a certain extent, but to date there has been no incentive to get users to run nodes that provide this functionality, nor has there been proper funding for the development of an open protocol that can facilitate this in a way that benefits the entire internet rather than one centralized company. However, with the recent emergence of crypto token powered protocols [[2, 3](#references)], there is now an opportunity to simultaneously incentivize users to contribute computation and bandwidth towards live video broadcast, in a way that aligns with financing the development of an open media server solution capable of delivering live streamed video according to all the latest standards and formats required to reach the full range of devices. Additionally, the economic actions traditionally seen as a result of token powered protocols indicate that the cost to the broadcaster in order to use the Livepeer network could be cheaper than the cost of any centralized solution.
+这种技术肯定在某种程度上可用，但到目前为止，还没有动力让用户运行提供此功能的节点，也没有适当的资金来开发可以通过以下方式开发协议：使整个互联网受益，而不是一个集中的公司。然而，随着最近出现的加密令牌供电协议[[2, 3](#参考)]，现在有机会同时激励用户为实时视频广播贡献计算和带宽，其方式与融资方式一致。开发一种开放式媒体服务器解决方案，能够根据达到所有设备所需的所有最新标准和格式提供实时流式视频。此外，传统上被认为是令牌供电协议的结果的经济行为表明，为了使用Livepeer网络，广播公司的成本可能比任何集中式解决方案的成本更便宜。
 
-As the Livepeer technology and protocol are delivered, it will enable users to participate in the following flow:
+随着Livepeer技术和协议的交付，它将使用户能够参与以下流程：
 
-1. Capture a video on your camera, phone, screen, or web cam and send it into the Livepeer network.
-2. Nodes running within the network will encode it into all the necessary formats to reach every supported device. Users running these nodes will be incentivized via fees paid by the broadcaster in ETH, and the opportunity to build reputation through the protocol token to earn the right to perform more work in the future.
-3. Any user on the network can request to view the stream, and it will automatically be distributed to them in near realtime.
+1. 在相机，手机，屏幕或网络摄像头上捕获视频，然后将其发送到Livepeer网络。
+2. 在网络中运行的节点将其编码为所有必要的格式，以到达每个支持的设备。 运行这些节点的用户将通过ETH广播公司支付的费用进行激励，并有机会通过协议令牌建立声誉，以获得未来执行更多工作的权利。
+3. 网络上的任何用户都可以请求查看流，它将自动近乎实时地分发给他们。
 
 <img src="https://s3.amazonaws.com/livepeerorg/LPExample.png" alt="Livepeer Network Example" style="width: 750px">
 
-### The Live Video Stack
+### 实时视频堆栈
 
-The technology stack for broadcasting live video has evolved over many years and contains many layers. Broadcasters need to capture video at the source, interface with a media server to process and transcode the video into many different formats, distribute the video across a network, and then allow the video to be played in high perceived quality by the end consumer. There are also economic questions that are introduced when one thinks through this stack, such as whether it should be the broadcaster or consumer who should be paying for the bandwidth to transfer the video.
+用于广播直播视频的技术栈已经发展了很多年并且包含许多层。 广播公司需要在源头捕获视频，与媒体服务器接口以处理视频并将其转码为多种不同格式，通过网络分发视频，然后允许最终消费者以高感知质量播放视频。 当人们通过这个堆栈思考时会引入经济问题，例如应该是广播公司还是应该为转移视频而支付带宽的消费者。
 
 A typical live streaming platform today needs to support RTMP, HLS, Mpeg-Dash video formats in H.264 and VP8 codec. New codecs like H.265/HEVC, VP9, and AV1 will become more popular in the near future as consumers become more accustomed to higher video quality.  For HLS alone, [Apple suggests](https://developer.apple.com/library/content/documentation/General/Reference/HLSAuthoringSpec/Requirements.html#//apple_ref/doc/uid/TP40016596-CH2-SW1) bitrates from 145kb/s all the way up to 7800kb/s, in order to serve the different types of devices under different conditions. All of this adds a significant amount of complexity and cost to live video broadcasting.
 
@@ -273,30 +273,30 @@ Truebit will write the results of the computation (succeeded or failed) back to 
 
 It is important that it be more profitable to simply stake LPT towards a valid, honestly performing transcoder, than it can be to cheat and take slashing penalties while still collecting fees and token allocations for dishonest work. Careful selection of the slashing params and verification rate can ensure this.
 
-#### A Note On Truebit
+#### 关于Truebit的一个说明
 
-*While the protocol makes use of Truebit in order to provide fully trustless verification of work, it may be necessary in practice to use available solutions that provide verification without the degree of trustlessness that Truebit can offer while Truebit is still under development and testing. Some options, ordered by degree of trustlessness, include:*
+*虽然协议使用Truebit来提供工作的完全不可信的验证，但是在实践中可能有必要使用可用的解决方案来提供验证，而不像Truebit在开发和测试期间所提供的不可信程度。根据不信任程度排序的选项包括:*
 
-*1. Livepeer API Based Oracle - Trust Livepeer to verify computation. Very centralized, not ideal for anything beyond testing.*  
-*2. Oraclize Computation Service - Trust a company who provides proofs of computation and who's entire reputation relies upon putting external data on chain with proofs that it wasn't tampered with.*  
-*3. Secure hardware enclaves - Services like Intel SGX or TownCrier provide trusted computing environments. Trust that their hardware implementation is correct and secure. This can be decentralized and audited.*
+*1. 基于Livepeer API的Oracle -信任Livepeer来验证计算。非常集中，不适合测试之外的任何东西。*  
+*2. Oraclize计算服务——信任一家提供计算证明的公司，这家公司的全部声誉依赖于将外部数据与未被篡改的证明放在chain上。*  
+*3. 安全硬件飞地——像Intel SGX或TownCrier这样的服务提供可信的计算环境。相信他们的硬件实现是正确和安全的。这可以分散和审计。*
 
 
-### Token Generation
+### 令牌生成
 
-Livepeer is inflationary in that new tokens will be generated and allocated over time according to the schedule communicated below in [Token Distribution](#token-distribution). If all roles in Livepeer behave according to the protocol, then newly generated tokens will be allocated to users in proportion to their bonded stake (minus fees). Transcoders have the role of calling the `Reward()` function in order to trigger the new token allocation or slashing which can be computed from all data available on chain.
+Livepeer的膨胀之处在于，随着时间的推移，新的令牌将根据[令牌分发](#令牌分发)中传递的时间表生成和分配。如果Livepeer中的所有角色都按照协议行事，那么新生成的令牌将按其绑定的股份(减去费用)的比例分配给用户。译码器的作用是调用` Reward()`函数，以触发新的令牌分配或削减，这可以从链上的所有可用数据计算出来。
 
-Each transcoder will be required to call `Reward()` once per round.
+每个转码器将被要求每轮调用`Reward()`一次。
 
-- Ensure that an active Transcoder is calling `Reward()`.
-- Ensure that the Transcoder has not called `Reward()` yet in this round.
-- Compute the number of token to mint based upon the `InflationRate`. Mint this many token.
-- Calculate the Transcoder's cut based upon their `BlockRewardCut`.
-- Distribute this into the Transcoder's bonded stake.
-- Distribute the remainder into the delegators reward pool.
-- Update the bonded amount of token to this Transcoder.
+-确保一个活跃的转码器正在调用`Reward()`。
+-确保编译器在这轮还没有调用`Reward()`。
+-根据`通货膨胀率`计算要铸造的令牌数目。铸造这许多代币。
+-计算代码转换的削减基于他们的`块奖励削减`。
+-分配到编码器的绑定桩。
+-将剩余的分配到委派者奖励池中。
+-将绑定的令牌数量更新到此转码器。
 
-Failure to invoke `Reward()` results in the direct consequence of losing a portion of token allocations, and showing up as a ding on one’s Transcoder reputation when it comes to being elected by Delegators for the role.
+调用` Reward() `失败的直接后果是丢失了一部分令牌分配，并且在由委派者为该角色选出时，会对代码转换者的声誉造成损害。
 
 ### 削减
 
@@ -395,13 +395,13 @@ Livepeer中的拒绝服务有两种方式：
 
 
 
-With `Segments` as the core unit of data flowing through the network, it is possible to do tit-for-tat bandwidth accounting using ETH as the basis for settlement. We borrow the Chequebook Contract abstraction from Swarm [[6](#references)] as a method of offchain payment passing with on chain settlement. Future developments in the ecosystem including the Raiden Network [[15](#references)] may allow of payment channels to be used for this purpose as well. Since token transfer is native to the protocol, it is also possible to embed pricing associated with content directly into the protocol. A broadcaster can charge for their time or content directly, and nodes will opt into this transfer of value by paying a higher price/segment which will flow back to the broadcaster.
+使用`Segments`作为流经网络的核心数据单元，可以使用ETH作为结算基础进行针锋相对的带宽计费。 我们从Swarm [[6]（＃references）]借用支票簿合同抽象作为一种通过链式结算传递的离线支付方法。 生态系统的未来发展，包括Raiden网络[[15]（＃references）]也可能允许支付渠道用于此目的。 由于令牌传输对于协议是本机的，因此还可以将与内容相关联的定价直接嵌入到协议中。 广播公司可以直接收取他们的时间或内容，节点将通过支付更高的价格/段来选择这种价值转移，这将转回广播公司。
 
-What's important to note is that while bandwidth accounting can be used to make it profitable to run Relay Nodes which just pass video segments around the network to add capacity, a-la a CDN, these nodes are purely incentivized by demand for the content, and not incentivized by new token allocations. In fact, the output of Livepeer can be inserted into a traditional CDN (like Amazon S3, Cloudflare, etc) or decentralized CDN (like IPFS or Swarm). Development of this peer-to-peer protocol for video segment distribution itself will be an ongoing opportunity for optimization and improvement in performance.
+需要注意的重要一点是，虽然可以使用带宽计费来运行中继节点，这些节点只是通过网络传输视频网段以增加容量，而不是CDN，但这些节点纯粹受到内容需求的激励， 不受新令牌分配的激励。 事实上，Livepeer的输出可以插入传统的CDN（如Amazon S3，Cloudflare等）或分散的CDN（如IPFS或Swarm）。 开发用于视频片段分发的这种点对点协议本身将是优化和改进性能的持续机会。
 
-Peer-to-peer CDNs have been shown to reduce 80-98% of bandwidth requirements on an origin CDN server [[17](#references)], and the token mechanics seen in decentralized networks can align stakeholders for the development and maintenance of an open version of the proprietary P2P CDNs that exist today. The PPSPP Protocol [[18](#references)] serves as a viable candidate for an open implementation that focuses on delivery of live content.
+已经证明点对点CDN可以减少原始CDN服务器[[17]（＃references）]上80-98％的带宽需求，并且在分散网络中看到的令牌机制可以使利益相关者对齐开发和维护今天存在的专有P2P CDN的开放版本。 PPSPP协议[[18]（＃references）]是开放实施的可行候选者，专注于提供实时内容。
 
-As non-critical to the cryptoeconomics of the Livepeer protocol, the details are spared from this document, but the interested can [follow along here](https://github.com/livepeer/go-livepeer) with the development, and look for a future document addressing purely the video distribution protocol.
+由于对Livepeer协议的加密经济学并不重要，因此本文不讨论细节，但是有兴趣的人可以随着开发(https://github.com/livepeer/go-livepeer)[跟随此处]，并寻找一个未来的纯视频分发协议文档。
 
 ## 用例 ###########################################
 

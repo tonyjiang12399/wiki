@@ -486,7 +486,7 @@ Twitter和Facebook等现有平台为大量受众提供了令人惊叹的实时�
 9. Steem白皮书 - Daniel Larimer, Ned Scott, Valentine Zavgorodnev, Benjamin Johnson, James Calfee, Michael Vandeberg - <https://steem.io/SteemWhitePaper.pdf>
 10. 介绍卡斯帕“友善的幽灵” - Vlad Zamfir - <https://blog.ethereum.org/2015/08/01/introducing-casper-friendly-ghost/>
 11. Tendermint文档 - Jae Kwon和Ethan Buchman - <https://tendermint.com/docs>
-12. 一群 - <http://swarm-gateways.net/bzz:/theswarm.eth/>
+12. Swarm - <http://swarm-gateways.net/bzz:/theswarm.eth/>
 13. 在BitTorrent中通过激励措施建立稳健性 - Bram Cohen - <http://bittorrent.org/bittorrentecon.pdf>
 14. WebTorrent - <https://webtorrent.io/>
 15. 雷电网络 - <http://raiden.network/>

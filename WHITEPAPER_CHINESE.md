@@ -195,42 +195,42 @@ Transcoder可以在下一轮转码前的RoundLockAmount时间之前更新它们�
 
 ### 广播+转码工作
 
-Transcoders who are open for business on the network, throw their hat into the ring for transcoding work by submitting a `TranscodeAvailability()` transaction. This indicates their availability and places them into a pool of transcoders available to take a newly submitted job.
+在网络上开放业务的代码转换人员可以通过提交一个`TranscodeAvailability()`事务来投入到代码转换工作中。这表示它们的可用性，并将它们放入可用于接受新提交的作业的编译器池中。
 
-When a broadcaster submits their stream into the Livepeer network it is given a `StreamID`. This serves as both a unique identifier, and it also contains the origin node address so that nodes know how to request and route requests to consume this stream towards the origin. The stream contains many consecutive `Segments`, as described in the [Video Segments](#video-segments) section. If the broadcaster would like the network to take care of transcoding their stream into all the formats and bitrates necessary to reach every user on every device, then the first step is submitting a transcoding job transaction on chain. Jobs are given a unique ID as well, and the input data to job consists of:
+当广播公司向Livepeer网络提交他们的流时，它被赋予一个`StreamID`。这既是一个惟一的标识符，也包含源节点地址，以便节点知道如何请求和将请求路由到源来使用这个流。流包含许多连续的`段`，如[视频段](#video-segments) 小节所述。如果广播公司希望网络负责将他们的流转换成所有必要的格式和比特率，以达到每个设备上的每个用户，那么第一步是提交一个链上的转换工作事务。作业也有唯一的ID，作业的输入数据包括:
 
 `Job(StreamID, TranscodingOptions, PricePerSegment)`
 
-The `TranscodingOptions` define the output bitrates, formats, encodings, etc, and the `PricePerSegment` lists the price that the broadcaster will offer.
+`TranscodingOptions`定义输出比特率、格式、编码等，`PricePerSegment`列出广播公司将提供的价格。
 
-As soon as this transaction is mined, the next blockhash will be used to pseudo-randomly determine the transcoder selected for this job. All transcoders with a price that’s lower than or equal to the price offered will be considered, and the blockhash modulus the number of candidate transcoders (weighted by their stakes) will determine the index of the selected transcoder.
+一旦挖掘了这个事务，下一个blockhash将用于伪随机地确定为此作业选择的转码器。所有价格低于或等于所提供价格的译码器都将被考虑，而blockhash模数候选译码器的数量(根据它们的权重)将决定所选译码器的索引。
 
-At this point the broadcaster can begin streaming video segments towards the transcoder, and they’ll participate in the following protocol. The protocol also makes use of a persistent storage solution, for example Swarm, as part of the work verification process.
+此时，广播器可以开始向编码器传输视频片段，它们将参与以下协议。该协议还使用了一个持久存储解决方案，例如Swarm，作为工作验证过程的一部分。
 
-#### Preprocessing
+#### 预处理
 
-1.  **Broadcaster**  -> **Livepeer Smart Contract**: submits a deposit on chain to cover the cost of the full transcoding job. This can be refilled later at any point, but the Transcoder may stop work if the deposit runs out as they gradually cash in for work done.
+1.  **Broadcaster**  -> **Livepeer Smart Contract**: 提交链上的存款，以支付整个代码转换工作的成本。这可以在以后的任何时候补充，但如果存款耗尽，随着他们逐渐兑现所做的工作，编码器可能会停止工作。
 
-#### The Job
+#### 工作
 
 2. **Broadcaster** -> **Livepeer Smart Contract**: Job(streamID, options, price/segment)
-    - Creates the job request on chain and places some ETH in escrow to pay for the work.
-3. The protocol can use the next block hash to deterministically select the correct Transcoder for this job.
-4. **Transcoder** -> **Broadcaster**: send output streamID and receipt that the job is accepted.
-5. **Broadcaster** -> **Transcoder**: send stream segments, which contain signatures verifying the input data.
-7. **Transcoder** performs transcoding and makes new output stream available on network
-9. **Transcoder**: Store a transcode receipt for each segment of transcoding work. A transcode receipt has the following fields.
+    - 在chain上创建作业请求，并在第三方托管中放置一些ETH来支付工作费用。
+3. 该协议可以使用下一个块哈希来确定地为该任务选择正确的转码器。
+4. **Transcoder** -> **Broadcaster**: 发送输出streamID并接收作业已被接受。
+5. **Broadcaster** -> **Transcoder**: 发送包含验证输入数据的签名的流段。
+7. **Transcoder** 执行代码转换，使新的输出流在网络上可用
+9. **Transcoder**: 存储每个代码转换工作段的代码转换收据。代码转换收据有以下字段。
 
-| Transcode Receipt Field | Description |
+| 码收据的领域 | 描述 |
 |-------|------------|
-| **StreamID** | Identifies the origin node and stream that this segment belongs to. | 
-| **Sequence Number** | The sequential order that this segment belongs in the original stream. |
-| **Input Data hash** | The hash of the input segment data payload. |
-| **Transcoded Data hash** | The hash of the output data after transcoding this segment. |
-| **Broadcaster segment signature** | A signature from the broadcaster of Priv(StreamID, Seq#, Dhash) which can be used to attest and verify that the broadcaster claims this to be the true data for this unique segment. |
-| **Transcoder segment signature** | A signature of all of the above fields from the transcoder attesting to the claim that this specific output transcoding was performed on this specific input. |
+| **StreamID** | 标识此段所属的源节点和流。 | 
+| **Sequence Number** | 这个段属于原始流的顺序。 |
+| **Input Data hash** | 输入段数据有效负载的哈希值。 |
+| **Transcoded Data hash** | 转码后输出数据的哈希值。 |
+| **Broadcaster segment signature** | Priv广播公司(StreamID, Seq#， Dhash)的一个签名，可用于证明和验证广播公司声称这是这个独特片段的真实数据。 |
+| **Transcoder segment signature** | 上述所有字段的签名，从代码转换器到声明此特定输出代码转换是在此特定输入上执行的签名。 |
 
-Whenever the transcoder observes that they are no longer receiving segments, they can call `ClaimWork()` to claim their work.
+每当编码器发现不再接收段时，就可以调用`ClaimWork()`来声明它们的工作。
 
 #### End Job
 

@@ -77,9 +77,9 @@ The existing decentralized development stack (web3) contains solutions for some 
 
 As a standalone application, any developer could build a live application on top of the LPMS, but it would still be centralized and would need to be scaled through traditional means. However when every node on the Livepeer network is running the LPMS, and the protocol’s economic incentives ensure that those nodes will contribute their processing power and bandwidth in service of transcoding and distributing live video, **a self-scaling, pay-as-you-go network is made available to developers, who can simply send their live stream into the network, and have the implementation details of scaling, payment, and media hosting abstracted away**.
 
-## Livepeer Protocol ###########################################
+## Livepeer协议 ###########################################
 
-The Livepeer Protocol defines how the various actors in a live streaming ecosystem participate in a secure and economically rational way. The two major areas that the protocol needs to address are the actual distribution of live video from the source to a large number of consumers in a performant and scalable way, and the economic incentives for encouraging participation in the network in a secure and game-theoretic manner. While this whitepaper will touch on the live video distribution itself where overlapping with the economic protocol, it will largely focus on the latter in order to demonstrate security and economic alignment. At the highest level, the protocol is designed to:
+Livepeer协议定义了直播流生态系统中的各个参与者如何以安全和经济合理的方式参与。 协议需要解决的两个主要领域是以高性能和可扩展的方式从源到大量消费者的实时视频的实际分发，以及在安全和游戏理论中鼓励参与网络的经济激励 方式。 虽然本白皮书将涉及与经济协议重叠的实时视频发布本身，但它将主要关注后者以展示安全性和经济一致性。 在最高级别，该协议旨在：
 
 - Allow any node to send a live video into the network, and optionally pay to have it transcoded into various formats and bitrates.
 - Allow any node to request the video from the network.
@@ -94,17 +94,17 @@ The Livepeer protocol is designed to address both the verification of work and t
 
 ### 视频片段
 
-The core unit of media within Livepeer is what we will call a `segment`. A segment is a time sliced chunk of multiplexed audio and video of time length `t`. Every segment in the Livepeer network is unique, and contains the cryptographic evidence to verify that the broadcaster intended this specific data for this specific segment. Each stream is made up of many consecutive segments, each containing a sequence number identifying their proper ordering. A segment contains the following fields:
+Livepeer中媒体的核心单位是我们称之为`细分市场`。 段是时间长度为`t`的多路复用音频和视频的时间切片块。 Livepeer网络中的每个网段都是唯一的，并包含加密证据，以验证广播公司是否为此特定网段提供此特定数据。 每个流由许多连续的段组成，每个段包含标识其正确排序的序列号。 细分包含以下字段：
 
-| Video Segment Field | Description |
+| 视频片段字段 | 描述 |
 |--------|--------|
-| **StreamID** | Identifies the origin node and stream that this segment belongs to. |
-| **SequenceNumber** | The sequential order that this segment belongs in the original stream. |
-| **DataPayload** | The binary metadata and data representing the audio/video in this segment. |
-| **DataHash** | The hash of the data payload. |
-| **BroadcasterSignature** | A signature from the broadcaster of `Priv(StreamID, SequenceNumber, hash(StreamID, SequenceNumber, DataHash))` which can be used to attest and verify that the broadcaster claims this to be the true data for this unique segment. |
+| **StreamID** | 标识此段所属的源节点和流。 |
+| **SequenceNumber** | 此段属于原始流的顺序。 |
+| **DataPayload** | 二进制元数据和表示此段中音频/视频的数据。 |
+| **DataHash** | 数据有效负载的哈希值。 |
+| **BroadcasterSignature** | 来自广告公司的`Priv（StreamID，SequenceNumber，hash（StreamID，SequenceNumber，DataHash））`的签名，可用于证明并验证广播公司声称这是该唯一段的真实数据。 |
 
-The Livepeer protocol generally uses segments as the unit of work for transcoding, distribution, and payments.
+Livepeer协议通常使用段作为转码，分发和支付的工作单元。
 
 ### Livepeer令牌
 
@@ -118,9 +118,9 @@ Livepeer Token（LPT）是Livepeer网络的协议令牌。 但它不是交换令
 
 遵循以太坊和许多流行的ERC20令牌[[16]（＃references）]的惯例，LPT将被10 ^ 18整除，较大的面额如LPT本身旨在用于诸如放样的用户级交易，以及 旨在用于协议会计的较小面额。
 
-### Protocol Roles
+### 协议角色
 
-Before going forward, let’s define the roles in the network so that there is a common vocabulary for discussing the protocol. A Livepeer node is any computer running the Livepeer software.
+在继续之前，让我们定义网络中的角色，以便讨论协议时有一个共同的词汇表。 Livepeer节点是运行Livepeer软件的任何计算机。
 
 | Node Role | Description |
 |--------|-----------|

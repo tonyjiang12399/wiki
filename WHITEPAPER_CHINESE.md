@@ -176,13 +176,13 @@ A node indicates their willingness to be a transcoder by submitting a `Transcode
 - `BlockRewardCut`: The % of the block reward that bonded nodes will pay them for the service of transcoding. (Example 2%. If a bonded node were to receive 100 LPT in block reward, then 2 LPT to the transcoder).
 - `FeeShare`: The % of the fees from broadcasting jobs that the transcoder is willing to share with the bonded nodes who delegate towards it. (Example 25%. If a transcoder were to receive 100 ETH in fees, they would pay 25 ETH to the bonded nodes).
 
-The Transcoder can update their availability and information up until `RoundLockAmount` time before the next transcoding round. This is offered as a % of the round. (Example 10% == 2.4小时. They can change this information until 2.4小时 before the next transcoding round which lasts for `RoundLength` 1 day). This gives bonded nodes the chance to review the fee splits and token reward splits relative to other transcoders, as well as anticipated fees based upon the rate they're charging and network demand, and move their delegated stake if they wish. At the start of a transcoding round (triggered by a call to the `InitializeRound()` transaction), the active transcoders for that round are determined based upon the total stake delegated towards each transcoder, and stakes and rates are locked in for the duration of that round.
+Transcoder可以在下一轮转码前的RoundLockAmount时间之前更新它们的可用性和信息。 这是一轮的百分比。 （示例10％= = 2.4小时。他们可以将此信息更改为下一个转码循环前的2.4小时，持续时间为`RoundLength`1天）。 这使得绑定节点有机会审查相对于其他代码转换器的费用分割和令牌奖励分割，以及基于它们收费和网络需求的费率的预期费用，并且如果他们愿意则移动他们的委托权益。 在转码循环开始时（通过调用`InitializeRound（）`事务触发），该轮的有效代码转换器是根据委托给每个代码转换器的总赌注确定的，赌注和利率被锁定持续时间 那一轮。
 
-There is one change that is allowed during the `RoundLockPeriod`: The lowest offered price/segment for any of the candidate transcoders is locked in and can't be moved, but other transcoder candidates can adjust their price/segment downwards. This allows them to match the lowest offered price on the network if they wish in order to guarantee their stake-weighted share of work on the network. They are not allowed to move their offered price upwards during this period.
+在`RoundLockPeriod`期间允许进行一项更改：任何候选代码转换器的最低提供价格/段都被锁定并且无法移动，但其他代码转换器候选者可以向下调整其价格/段。 这使他们能够匹配网络上的最低报价，以保证他们在网络上的利益加权份额。 在此期间，他们不得向上移动他们的报价。
 
-Here is an example state of Transcoder options that a delegator can review when deciding whom to delegate towards.
+以下是代理商在决定委派给谁时可以查看的代码转换器选项的示例状态。
 
-| Transcoder ID | PricePerSegment | BlockRewardCut | FeeShare |
+| 转码器ID | 每段价格 | 阻止奖励削减 | 收费 |
 |----|----|----|----|
 | 1 | 22 wei | 1% | 25% |
 | 2 | 30 wei | 2% | 40% |
@@ -190,9 +190,9 @@ Here is an example state of Transcoder options that a delegator can review when 
 | ... | ... | ... | ... |
 | N | 14 wei | 0% | 2% |
 
-*Note on price: In this document we list price/segment. In reality, Livepeer plans to use a gas accounting inspired model where there is a notion of units of gas required for certain job parameters of a segment such as bitrate, encoding, frame size, etc. Price/segment is a stand in, where the incentives are the same, but in reality they’ll likely be communicating price/gas.*
+*价格说明：在本文档中，我们列出价格/细分。 实际上，Livepeer计划使用一种gas会计启发模型，其中有一个段的某些工作参数所需的gas单位的概念，如比特率，编码，帧大小等。价格/段是一个支持，其中 激励措施是相同的，但实际上它们可能会传达价格/gas。*
 
-### Broadcast + Transcoding Job
+### 广播+转码工作
 
 Transcoders who are open for business on the network, throw their hat into the ring for transcoding work by submitting a `TranscodeAvailability()` transaction. This indicates their availability and places them into a pool of transcoders available to take a newly submitted job.
 

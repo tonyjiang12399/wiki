@@ -475,22 +475,22 @@ Twitter和Facebook等现有平台为大量受众提供了令人惊叹的实时�
 
 ## 参考文献 ###########################################
 
-1. Ethereum White Paper - Vitalik Buterin - Ethereum Wiki - <https://github.com/ethereum/wiki/wiki/White-Paper>
-2. Fat Protocols - Joel Monegro - USV Blog - <http://www.usv.com/blog/fat-protocols>
-3. Crypto Tokens and the Coming Age of Protocol Innovation - Albert Wenger - <http://continuations.com/post/148098927445/crypto-tokens-and-the-coming-age-of-protocol>
-4. The Case For SectorCoins - Eric Tang - <https://medium.com/@ericxtang/case-for-sectorcoins-b70a7c820c2d#.7892n4a57>
-5. Delegated Proof-of-Stake Consensus - Daniel Larimer - <https://bitshares.org/technology/delegated-proof-of-stake-consensus/>
-6. Truebit - Jason Teutsch and Christian Reitweisner - <https://people.cs.uchicago.edu/~teutsch/papers/truebit.pdf>
-7. swap, swear and swindle, incentive system for swarm - viktor trón, aron fischer, dániel a. nagy, zsolt felföldi, nick johnson - <http://swarm-gateways.net/bzz:/theswarm.eth/ethersphere/orange-papers/1/sw%5E3.pdf>
-8. Kademlia: A Peer-to-peer Information System Based On The XOR Metric - Petar Maymounkov and David Mazieres <https://pdos.csail.mit.edu/~petar/papers/maymounkov-kademlia-lncs.pdf>
-9. Steem Whitepaper - Daniel Larimer, Ned Scott, Valentine Zavgorodnev, Benjamin Johnson, James Calfee, Michael Vandeberg - <https://steem.io/SteemWhitePaper.pdf>
-10. Introducing Casper "the Friendly Ghost" - Vlad Zamfir - <https://blog.ethereum.org/2015/08/01/introducing-casper-friendly-ghost/>
-11. Tendermint Docs - Jae Kwon and Ethan Buchman - <https://tendermint.com/docs>
-12. Swarm - <http://swarm-gateways.net/bzz:/theswarm.eth/>
-13. Incentives Build Robustness in BitTorrent - Bram Cohen - <http://bittorrent.org/bittorrentecon.pdf>
+1. 以太坊白皮书 - Vitalik Buterin - Ethereum Wiki - <https://github.com/ethereum/wiki/wiki/White-Paper>
+2. 脂肪协议 - Joel Monegro - USV Blog - <http://www.usv.com/blog/fat-protocols>
+3. 加密令牌和协议创新的未来时代 - Albert Wenger - <http://continuations.com/post/148098927445/crypto-tokens-and-the-coming-age-of-protocol>
+4. SectorCoins案例 - Eric Tang - <https://medium.com/@ericxtang/case-for-sectorcoins-b70a7c820c2d#.7892n4a57>
+5. 委托的证明共识 - Daniel Larimer - <https://bitshares.org/technology/delegated-proof-of-stake-consensus/>
+6. Truebit - Jason Teutsch和Christian Reitweisner - <https://people.cs.uchicago.edu/~teutsch/papers/truebit.pdf>
+7. 交换，发誓和诈骗，群体激励系统 - viktor trón, aron fischer, dániel a. nagy, zsolt felföldi, nick johnson - <http://swarm-gateways.net/bzz:/theswarm.eth/ethersphere/orange-papers/1/sw%5E3.pdf>
+8. Kademlia: 基于XOR度量的点对点信息系统 - Petar Maymounkov和David Mazieres <https://pdos.csail.mit.edu/~petar/papers/maymounkov-kademlia-lncs.pdf>
+9. Steem白皮书 - Daniel Larimer, Ned Scott, Valentine Zavgorodnev, Benjamin Johnson, James Calfee, Michael Vandeberg - <https://steem.io/SteemWhitePaper.pdf>
+10. 介绍卡斯帕“友善的幽灵” - Vlad Zamfir - <https://blog.ethereum.org/2015/08/01/introducing-casper-friendly-ghost/>
+11. Tendermint文档 - Jae Kwon和Ethan Buchman - <https://tendermint.com/docs>
+12. 一群 - <http://swarm-gateways.net/bzz:/theswarm.eth/>
+13. 在BitTorrent中通过激励措施建立稳健性 - Bram Cohen - <http://bittorrent.org/bittorrentecon.pdf>
 14. WebTorrent - <https://webtorrent.io/>
-15. Raiden Network - <http://raiden.network/>
-16. ERC20 Token Standard - <https://github.com/ethereum/EIPs/issues/20>
-17. Peer5 leverages viewers’ devices for a P2P approach to streaming video - <https://techcrunch.com/2017/01/26/peer5-y-combinator/>
-18. Peer-to-Peer Streaming Peer Protocol - <https://tools.ietf.org/html/rfc7574>
-19. Inflation and Participation in Stake Based Protocols - Doug Petkanics - <https://medium.com/@petkanics/inflation-and-participation-in-stake-based-token-protocols-1593688612bf>
+15. 雷电网络 - <http://raiden.network/>
+16. ERC20令牌标准 - <https://github.com/ethereum/EIPs/issues/20>
+17. Peer5利用观众的设备实现流媒体视频的P2P方法 - <https://techcrunch.com/2017/01/26/peer5-y-combinator/>
+18. 点对点流媒体对等协议 - <https://tools.ietf.org/html/rfc7574>
+19. 基于股权协议的通货膨胀与参与 - Doug Petkanics - <https://medium.com/@petkanics/inflation-and-participation-in-stake-based-token-protocols-1593688612bf>

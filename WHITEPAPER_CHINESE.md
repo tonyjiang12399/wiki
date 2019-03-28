@@ -232,46 +232,46 @@ Transcoder可以在下一轮转码前的RoundLockAmount时间之前更新它们�
 
 每当编码器发现不再接收段时，就可以调用`ClaimWork()`来声明它们的工作。
 
-#### End Job
+#### 结束工作
 
-10. **Transcoder** -> **Livepeer Smart Contract**: Call `ClaimWork(JobID, StartSegmentSeq#, EndSegmentSeq#, MerkleRoot)`. Transcoder is claiming on chain they have performed work on the claimed segment range, with a merkle root of all of the transcode receipt data to commit to the content of these encoded segments.
-11. Wait for this transaction to be mined, and observe the next blockhash. The protocol can then determine which segments will be verified based upon the `VerificationRate`.
-12. **Transcoder** -> **Swarm**: Write input data payloads for the segments that will be challenged via verification, using SWEAR params to ensure the data will be there long enough for verification (`VerificationPeriod` time).
-13. **Transcoder** -> **Livepeer Smart Contract**: Provide transcode claims on chain for each segment that needs to be verified, along with merkle proofs for the receipts for each segment in the transcode claims. The smart contract can verify the signatures from Broadcaster and **Transcoder** to ensure all data necessary is available to conduct verification, and can verify the merkle proofs against the committed merkle root from `ClaimWork()`.
-14.  **Transcoder** -> **Truebit**: `Verify()`. This is an onchain call to the Truebit smart contract, where the Transcoder provides the Swarm input hash for the challenged segment. (More on verification in the following section)
-15. **Truebit** -> **Livepeer Smart Contract**:  The result of the job is written on chain. This is compared to the transcoding claim result that the Transcoder provided.
-16.  **Livepeer Smart Contract**: at this point the Livepeer smart contract has all the information it needs to determine if the Transcoder’s work is verified.
-    - If verified correct, then use as input to token allocation algorithm and release of escrowed fees.
-    - If incorrect, then Transcoder and its stakers get slashed `FailedVerificationSlashAmount` and the Broadcaster is refunded.
+10. **Transcoder** -> **Livepeer Smart Contract**: 调用`ClaimWork(JobID, StartSegmentSeq#, EndSegmentSeq#, MerkleRoot)`。转码器在链上声明他们已经对所声明的段范围执行了工作，所有转码接收数据的merkle根都提交到这些编码段的内容。
+11. 等待挖掘这个事务，并观察下一个blockhash。然后，协议可以根据`VerificationRate`确定将验证哪些段。
+12. **Transcoder** -> **Swarm**: 为将通过验证受到挑战的段编写输入数据有效负载，使用SWEAR params确保数据足够长(`VerificationPeriod`时间)。
+13. **Transcoder** -> **Livepeer Smart Contract**:为需要验证的每个段提供链上的代码转换索赔，以及代码转换索赔中每个段的收据的merkle证明。smart contract可以验证来自播音员和**Transcoder**的签名，以确保所有必要的数据都可用来进行验证，并且可以根据`ClaimWork()`中提交的merkle根来验证merkle证明。
+14.  **Transcoder** -> **Truebit**: `Verify()`. 这是对Truebit智能契约的一个onchain调用，其中，转码器为受挑战的段提供群输入散列。(更多关于验证的信息见下一节)
+15. **Truebit** -> **Livepeer Smart Contract**:  这项工作的结果写在链上。这将与转码器提供的转码声明结果进行比较。
+16.  **Livepeer Smart Contrac如果验证正确，则使用作为输入的令牌分配算法和释放托管费用。t**: 在这一点上，Livepeer智能契约拥有它所需要的所有信息，以确定是否验证了转码器的工作。
+    - 如果验证正确，则使用作为输入的令牌分配算法和释放托管费用。
+    - 如果不正确，那么Transcoder和它的stakers将被削减`FailedVerificationSlashAmount`，广播公司将得到退款。
 
-The Broadcaster can stop sending segments at any point, which effectively is an `EndJob()`.
+广播器可以在任何时候停止发送片段，这实际上是一个`EndJob()`。
 
-At this point the transcoding has been performed, proof of the work has been claimed on the chain, and failure or success of the verification of the work has been reported. All the info is on chain to determine allocation of fees and token allocations to transcoders and delegators, or slashing in the case of failed verification. Let’s take a look at how work is actually verified.
+此时已经执行了代码转换，链上已经声明了工作的证明，并且已经报告了工作验证的失败或成功。所有的信息都在链上，以确定向代码转换器和委托程序分配的费用和令牌分配，或者在验证失败的情况下进行削减。让我们来看看实际是如何验证工作的。
 
-### Verification of Work
+### 验证工作
 
-In order to allocate fees to transcoders who claim that they have performed a transcoding job, it’s necessary that the protocol can determine that the job was actually performed correctly with high probability. For this, Livepeer extends the research of, and makes use of, the [Truebit Protocol](http://truebit.io) [[6](#references)].
+为了将费用分配给声称已经执行了代码转换工作的代码转换器，协议必须能够确定该工作实际上是正确执行的，并且具有很高的概率。为此，Livepeer扩展了[Truebit协议](http://truebit.io) [[6](#references)]的研究并利用了它。
 
-Truebit works by having one participant (the solver) perform the actual work for the fee, in this case transcoding, and then having additional participants (verifiers) verify the work in order to detect mistakes, errors, or cheating. The task is broken down into very small steps, and the verifiers check the work of the solver to find the first step that differs from what they expected it to be. Then, only this one very small step needs to be played out on chain by a smart contract (judge), who can tell which party did the work correctly. The economic incentives, including forced errors to incentivize checking on the part of verifiers, ensure that it is not profitable to cheat or challenge incorrectly, but it is profitable to play the role of checking the work.
+Truebit的工作方式是让一个参与者(求解者)执行实际工作，并收取一定的费用，在本例中是代码转换，然后让其他参与者(验证者)验证工作，以检测错误、错误或欺骗。该任务被分解为非常小的步骤，验证者检查求解器的工作，以找到与他们期望的不同的第一步。然后，只有这一个非常小的步骤需要由一个聪明的合同(法官)来执行，谁能知道哪一方做的工作是正确的。经济激励，包括强制错误，以激励检查的一部分，以确保它不是有利可图的欺骗或挑战不正确，但它是有利可图的，发挥检查工作的作用。
 
-The downside of this protocol is that it costs between 5x-50x the cost of the original work in order to verify all work. Livepeer uses Truebit as a black box to verify segments, but it gets around having to pay this very high verification tax by only verifying a small percentage of segments randomly, and using slashing in the case of failed verifications. The `VerificationRate` set within Livepeer determines how frequently a specific segment is to be selected for challenge within Truebit, and the randomness of a future block hash after the work has been committed to the blockchain, determines which segments specifically are selected.
+这个协议的缺点是，为了验证所有的工作，它的成本是原始工作成本的5 -50x倍。Livepeer使用Truebit作为黑盒子来验证片段，但它只随机验证一小部分片段，并在验证失败的情况下使用，从而避免了支付高昂的验证税。Livepeer中的“VerificationRate”集决定了在Truebit中选择一个特定段进行挑战的频率，而在工作提交到区块链之后，未来块哈希的随机性决定了具体选择哪些段。
 
-If work is committed via an `ClaimWork()` call in block `N`, then
+如果工作是通过调用block `N`中的`ClaimWork()`提交的，那么
 
-If `Sha3(N, BlockHash(N), Seg#) % VerificationRate == 0` then the segment # must be verified.
+如何`Sha3(N, BlockHash(N), Seg#) % VerificationRate == 0` 然后必须验证段#。
 
-The Transcoder provides Transcode Claims on chain for the candidate segments by invoking the `Verify()` transaction. The Livepeer Smart Contract can verify the authenticity of these claims using the internal signatures and provided merkle proofs, and then invoke a call to Truebit to verify only these segments.
+代码转换器通过调用`Verify()`事务为候选段提供链上的代码转换声明。Livepeer智能契约可以使用内部签名和提供merkle证明来验证这些声明的真实性，然后调用Truebit来只验证这些片段。
 
-Truebit solvers and verifiers access the input data for a segment from a persistent content addressed storage system, such as Swarm. The Transcoder is responsible for verifying that the segment data is available in Swarm, and can optionally look for receipts from the SWEAR protocol [[5](#references)] guaranteeing persistence for a certain period of time, which is long enough for Truebit to play out. Additionally, they can take it upon themselves to run a Swarm node ensuring that the data is available to Truebit verification. If they have reason to believe that data is not available in Swarm, they can provide it, or just call `ClaimWork()` on the previously available data.
+Truebit求解程序和验证程序访问来自持久内容寻址存储系统(如Swarm)的段的输入数据。译码器负责验证段数据在Swarm中可用，并且可以选择从SWEAR协议[[5](#references)]中查找保证一段时间的持久性的收据，这段时间足够Truebit运行。此外，他们可以自己运行一个群集节点，确保数据可用来进行Truebit验证。如果他们有理由相信群集中没有可用的数据，他们可以提供这些数据，或者对以前可用的数据调用`ClaimWork()`。
 
-Truebit will write the results of the computation (succeeded or failed) back to the Livepeer Smart Contract, which can then be used in the reward and slashing calculations within the protocol. A transcoding node can not predict in advance which segments will be verified, and the following penalties will be felt in the case of cheating or failing to transcode correctly:
+Truebit将把计算结果(成功或失败)写回Livepeer智能契约，然后可以在协议内用于奖励和削减计算。代码转换节点不能预先预测哪些片段将被验证，如果作弊或不能正确地进行代码转换，将会受到以下惩罚:
 
-- `FailedVerificationSlashAmount` will be slashed if they fail a verification from Truebit.
-- `MissedVerificationSlashAmount` will be slashed if they fail to provide transcode claims and invoke Truebit on segments they were required to do so.
-- Lost fee from the broadcaster.
-- Not only will the Transcoder be slashed, but all their delegators will be slashed as well. They will take this account into their decision of who to delegate towards, and the Transcoder could lose the lucrative job they hold.
+- `FailedVerificationSlashAmount`如果他们没有通过Truebit的验证，就会被砍掉。
+- `MissedVerificationSlashAmount`如果他们不能提供代码转换声明，并且不能在要求他们这样做的片段上调用Truebit，那么他们将被删除。
+- 广播公司损失的费用。
+- 不仅代码转换人员将被削减，他们所有的委派人员也将被削减。他们会把这个考虑到他们的决定委托给谁，而转码员可能会失去他们所拥有的有利可图的工作。
 
-It is important that it be more profitable to simply stake LPT towards a valid, honestly performing transcoder, than it can be to cheat and take slashing penalties while still collecting fees and token allocations for dishonest work. Careful selection of the slashing params and verification rate can ensure this.
+重要的是，将LPT押注于一个有效的、诚实执行的代码转换程序比欺骗和接受严厉的惩罚更有利可图，而同时还要为不诚实的工作收取费用和令牌分配。仔细选择削减参数和验证率可以确保这一点。
 
 #### 关于Truebit的一个说明
 

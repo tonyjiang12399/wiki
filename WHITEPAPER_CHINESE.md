@@ -81,16 +81,16 @@ As a standalone application, any developer could build a live application on top
 
 Livepeer协议定义了直播流生态系统中的各个参与者如何以安全和经济合理的方式参与。 协议需要解决的两个主要领域是以高性能和可扩展的方式从源到大量消费者的实时视频的实际分发，以及在安全和游戏理论中鼓励参与网络的经济激励 方式。 虽然本白皮书将涉及与经济协议重叠的实时视频发布本身，但它将主要关注后者以展示安全性和经济一致性。 在最高级别，该协议旨在：
 
-- Allow any node to send a live video into the network, and optionally pay to have it transcoded into various formats and bitrates.
-- Allow any node to request the video from the network.
-- Allow participants to contribute their processing power and bandwidth in service of transcoding and distribution of video, and to be compensated accordingly.
+- 允许任何节点将实时视频发送到网络，并可选择付费以将其转码为各种格式和比特率。
+- 允许任何节点从网络请求视频。
+- 允许参与者为视频的转码和分发贡献其处理能力和带宽，并相应地进行补偿。
 
-In a decentralized network where participants are rewarded in proportion to the amount of work that they contributed, the two big challenges that need to be addressed to ensure security are:
+在去中心化的网络中，参与者按照他们贡献的工作量按比例获得奖励，确保安全性需要解决的两大挑战是：
 
-- Can it be verified that the work that the nodes did was done correctly?
-- Are the nodes being awarded for real work that contributed value to the network, as opposed to fake work done in an attempt to gain token allocations unfairly?
+- 是否可以验证节点所做的工作是否正确完成？
+- 对于为网络贡献价值的实际工作，节点是否被授予，而不是为了不公平地获得令牌分配而进行的虚假工作？
 
-The Livepeer protocol is designed to address both the verification of work and the prevention of fake work, while also offering solutions for automatic scalability of the network and baked in governance for protocol evolution over time.
+Livepeer协议旨在解决工作验证和防止虚假工作的问题，同时还提供网络自动可扩展性的解决方案，并随着时间的推移在协议演变的治理中融入其中。
 
 ### 视频片段
 
@@ -122,59 +122,60 @@ Livepeer Token（LPT）是Livepeer网络的协议令牌。 但它不是交换令
 
 在继续之前，让我们定义网络中的角色，以便讨论协议时有一个共同的词汇表。 Livepeer节点是运行Livepeer软件的任何计算机。
 
-| Node Role | Description |
+| 节点角色 | 描述 |
 |--------|-----------|
-| **Broadcaster** | Livepeer node publishing the original stream |
-| **Transcoder** | Livepeer node performing the job of transcoding the stream into another codec, bitrate, or packaging format. |
-| **Relay Node** | Livepeer node participating in the distribution of live video and passing of protocol messages, but not necessarily performing any transcoding. |
-| **Consumer** | Livepeer node requesting the stream, likely to view it or serve it through a gateway to their app or DApp’s users. |
+| **Broadcaster** | Livepeer节点发布原始流 |
+| **Transcoder** | Livepeer节点执行将流转码为另一种编解码器，比特率或打包格式的工作。 |
+| **Relay Node** | Livepeer节点参与实时视频的分发和协议消息的传递，但不一定执行任何转码。 |
+| **Consumer** | Livepeer节点请求stream，可能通过网关查看或通过其应用程序或DApp的用户提供服务。 |
 
-In addition to the above roles played by users running Livepeer nodes, the protocol also will refer to the following systems. While we use certain specific systems to make reference to a possible implementation, alternative systems can also be swapped in if they provide similar functionality and cryptoeconomic guarantees:
+除了运行Livepeer节点的用户所扮演的上述角色之外，该协议还将参考以下系统。 虽然我们使用某些特定系统来参考可能的实现，但如果它们提供类似的功能和加密经济保证，也可以交换替代系统：
 
-| System Role | Description |
+| 系统的作用 | 描述 |
 |-------|----------|
 | **Swarm** | Content addressed storage platform. Data can be guaranteed to be available there temporarily during the verification process via SWEAR protocol [[7, 12](#references)]. *(Note in this document we refer to Swarm, but other content addressed storage platforms can be substituted if data availability can be guaranteed with high probability).* |
 | **Livepeer Smart Contract** | Smart contract running on the Ethereum network [[1](#references)]. |
 | **Truebit** | Blackbox verification protocol that guarantees correctness of computation placed on chain (at a hefty cost) [[6](#references)]. (<http://truebit.io>) |
 
-Here is a visual overview of the roles, and the ways in which they communicate with one another in the work verification process described below.
+下面是角色的可视化概述，以及它们在下面描述的工作验证过程中相互通信的方式。
 
 <img src="https://livepeer-dev.s3.amazonaws.com/docs/lpprotocol.png" alt="Protocol Visual Overview" style="width: 750px">  
 
-*Segments flowing from the broadcaster to the transcoder and eventually to the consumer. The transcoder ensures they have signatures and proof of work to participate in the work verification procedure.*
+*片段从广播器流向译码器，最终流向消费者。译码员确保他们有签名和工作证明，以参与工作验证过程。*
 
-**Note on Transcoders:** Transcoders play the most critical role in the Livepeer ecosystem. They are the ones who are taking an input stream and converting it into many different formats in a timely manner for low latency distribution. As such they benefit from high availability, efficient, powerful hardware (potentially with GPU accelerated transcoding), high bandwidth connections, and solid DevOps practices. Transcoders should churn far less than other network participants, as when they take on the job of transcoding a stream, it’s less than ideal if they drop off the network. While the network can scale to support many participants playing the role of transcoder (and earning the requisite token allocations), this is a special role that’s delegated from most network participants, in order to ensure that a reliable network that provides value to broadcasters is maintained. More below on this delegation.
+**注释 代码转换器:** 转码器在Livepeer生态系统中扮演着最重要的角色。 他们正在采用输入流并将其及时转换为多种不同格式，以实现低延迟分发。 因此，它们受益于高可用性，高效，强大的硬件（可能具有GPU加速转码），高带宽连接和可靠的DevOps实践。 转码器应该比其他网络参与者流失得更少，因为当他们承担转码流的工作时，如果他们从网络中退出，它就不太理想了。 虽然网络可以扩展以支持许多参与者扮演转码器的角色（并获得必要的令牌分配），但这是从大多数网络参与者委派的特殊角色，以确保维持为广播公司提供价值的可靠网络。 以下是关于这个代表团的事。
 
-### Consensus
+### 共识
 
-Livepeer has a two layer consensus system. The LPT ledger and transactions are secured by the underlying blockchain, such as Ethereum. Any transfer of the LPT token or any transaction in the system can be considered to have been confirmed with the same security as the underlying proof of work or proof of stake blockchain. The second layer however, dictates the distribution of newly generated LPT. This is governed by the Livepeer Smart Contract, and participation in the protocol by various actors. While there is no consensus required per say, in terms of acceptance and validation of previous blocks, the protocol defines rules for participation and conditions upon which actors will be penalized (slashed) for failing to fulfill their role.
+Livepeer有一个两层共识系统。 LPT分类账和交易由底层区块链（如以太坊）保护。 任何LPT令牌的转移或系统中的任何交易都可以被认为已经确认具有与基础工作证明或股权区块链证明相同的安全性。 然而，第二层决定了新生成的LPT的分布。 这由Livepeer智能合约管理，并由各方参与协议。 虽然每个发言都没有达成共识，但在接受和验证以前的版块方面，该协议规定了参与者的规则以及参与者因未能履行其职责而受到惩罚（削减）的条件。
 
-This second level of consensus governing the newly generated token is based upon Delegated Proof of Stake (DPOS), as inspired by systems like Bitshares, Steem, Tendermint, and Casper [[5, 9, 10, 11](#references)]. The role of validators in the network is played by Transcoders. Any user can delegate their stake towards a transcoder, who then needs to perform transcoding jobs in the network, participate in the work verification protocol, and invoke functions on chain at specific intervals to validate this work. The protocol will distribute fees and newly generated token, and it will slash the stake of badly behaved actors. The validation result will be recorded on-chain via Truebit after it performs the validation, so there will be no room for disputes between the broadcaster and the transcoder.
+管理新生成的令牌的第二级共识是基于委托的证明证明（DPOS），受Bitshares，Steem，Tendermint和Casper [[5,9,10,11]（＃references）]等系统的启发。 验证器在网络中的作用由转码器完成。 任何用户都可以将他们的利益委托给代码转换器，代码转换器然后需要在网络中执行转码作业，参与工作验证协议，并以特定的时间间隔在链上调用函数来验证这项工作。 该协议将分配费用和新生成的令牌，它将削减行为不端的演员的利益。 验证结果将在执行验证后通过Truebit在链上进行记录，因此广播公司和代码转换器之间不存在争议的余地。
 
-### Bonding + Delegation
 
-In Livepeer, in order to indicate stake in the network, nodes must bond some amount of their LPT. They do this through the `Bond()` transaction, which will tie up their stake in the smart contract until they `Unbond()`, at which point they will enter an unbonding state which will last for `UnbondingPeriod` time. Upon completion of the `UnbondingPeriod` they can then withdraw their LPT.
+### 绑定+授权
 
-The bonded amount is used to delegate stake towards a Transcoder. The network supports `N` active transcoders at any one time, which is a moveable network parameter. Any node can indicate that it wishes to be a Transcoder with a `Transcoder()` transaction, and the protocol will select the `N` transcoders with the most cumulative stake (their own + delegated from other nodes) at the start of each round, along with one random transcoder from the waitlist.
+在Livepeer中，为了表明网络中的利益，节点必须绑定一定数量的LPT。 他们通过`Bond（）`交易来做到这一点，这将把他们在智能合约中的股份捆绑起来，直到他们`Unbond（）`，此时他们将进入一个无约束状态，这将持续“UnbondingPeriod”时间。 完成“UnbondingPeriod”后，他们可以撤回他们的LPT。
 
-Newly generated token in Livepeer is distributed to bonded nodes in relative proportion to the amount of work that they have bonded (minus fees), as long as they’ve delegated towards transcoding nodes that behave according to the protocol. Bonds can be slashed (reduced by a certain percentage) if the nodes that they’ve delegated towards do not behave and violate one of the slashing conditions. Nodes who have bonded and delegated towards a Transcoder also receive a portion of the fees that the Transcoder generates through transcoding jobs on the network. In essence, nodes who perform work, earn the fees that broadcasters paid for that work.
+绑定金额用于将股权委托给Transcoder。 网络在任何时候都支持`N`个活动的代码转换器，这是一个可移动的网络参数。 任何节点都可以指示它希望成为具有`Transcoder（）`事务的Transcoder，并且协议将在每轮开始时选择具有最多累积权益（他们自己的+从其他节点委托）的`N`转码器。 ，以及来自等候名单的一个随机代码转换器。
 
-Going forward, when this document uses the term "delegator", it is referring to bonded nodes who have delegated their stake towards a transcoder candidate, instead of delegating it towards themselves as a transcoder.
+Livepeer中新生成的令牌以与其绑定的工作量（减去费用）相对的比例分配给绑定节点，只要它们委派给根据协议行为的代码转换节点。 如果他们委派的节点不表现并违反其中一个削减条件，则可以削减债券（减少一定百分比）。 已经绑定并委托给代码转换器的节点也会收到代码转换器通过网络转码作业生成的部分费用。 从本质上讲，执行工作的节点可以获得广播公司为该工作支付的费用。
 
-In summary, participants choose to bond their stake for the following reasons:
+展望未来，当本文档使用术语“委托人”时，它指的是已将其权益委托给代码转换器候选者的绑定节点，而不是将其作为代码转换器委托给自己。
 
-- Participate in delegating towards effective transcoders who will provide great service to the network, ensuring its value to broadcasters.
-- Build reputation and future-work allocation in form of allocated token in proportion to stake.
-- Earn fees generated from transcoders.
-- They may wish to be a Transcoder.
+总之，参与者选择保留他们的股份，原因如下：
 
-### Transcoder() Transaction
+- 参与委派有效的代码转换器，为网络提供优质服务，确保其对广播公司的价值。
+- 以分配令牌的形式按照股权比例建立声誉和未来工作分配。
+- 赚取转码器产生的费用..
+- 他们可能希望成为转码器。
 
-A node indicates their willingness to be a transcoder by submitting a `Transcoder()` transaction, which publicizes the following three properties:
+### 转码器() 交易
 
-- `PricePerSegment`: the lowest price they are willing to accept to transcode a segment of video
-- `BlockRewardCut`: The % of the block reward that bonded nodes will pay them for the service of transcoding. (Example 2%. If a bonded node were to receive 100 LPT in block reward, then 2 LPT to the transcoder).
-- `FeeShare`: The % of the fees from broadcasting jobs that the transcoder is willing to share with the bonded nodes who delegate towards it. (Example 25%. If a transcoder were to receive 100 ETH in fees, they would pay 25 ETH to the bonded nodes).
+节点通过提交`Transcoder（）`事务表明他们愿意成为代码转换器，该事务公开以下三个属性：
+
+- `PricePerSegment`: 他们愿意接受转录视频片段的最低价格
+- `BlockRewardCut`: 绑定节点将为转码服务支付的块奖励百分比。 （例2％。如果一个绑定节点在块奖励中接收100个LPT，那么2个LPT到转码器）。
+- `FeeShare`: 代码转换器愿意与委托给它的绑定节点共享的广播作业的费用百分比。 （例25％。如果代码转换器要收取100 ETH的费用，它们将向绑定节点支付25 ETH）。
 
 Transcoder可以在下一轮转码前的RoundLockAmount时间之前更新它们的可用性和信息。 这是一轮的百分比。 （示例10％= = 2.4小时。他们可以将此信息更改为下一个转码循环前的2.4小时，持续时间为`RoundLength`1天）。 这使得绑定节点有机会审查相对于其他代码转换器的费用分割和令牌奖励分割，以及基于它们收费和网络需求的费率的预期费用，并且如果他们愿意则移动他们的委托权益。 在转码循环开始时（通过调用`InitializeRound（）`事务触发），该轮的有效代码转换器是根据委托给每个代码转换器的总赌注确定的，赌注和利率被锁定持续时间 那一轮。
 

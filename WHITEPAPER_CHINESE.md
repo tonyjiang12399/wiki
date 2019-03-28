@@ -297,43 +297,44 @@ Each transcoder will be required to call `Reward()` once per round.
 
 Failure to invoke `Reward()` results in the direct consequence of losing a portion of token allocations, and showing up as a ding on one’s Transcoder reputation when it comes to being elected by Delegators for the role.
 
-### Slashing
+### 削减
 
-As previously mentioned, the conditions for slashing are:
+如前所述，削减的条件是：
 
-- Failing a verification
-- Failing to invoke verification when required to do so
-- Not performing a proportional share of the required work within the platform based upon delegated stake
+- 验证失败
+- 在需要时未能调用验证
+- 根据委托的股权，不在平台内按比例分配所需的工作
 
-One of the benefits of building within the Ethereum ecosystem are the network effect benefits you receive from being able to build on top of other protocols such as Truebit and Swarm/SWEAR. Unfortunately, with reliance on these external systems, which themselves have external dependencies and incentives, it’s possible that a flaw or weakness in one of those protocols could result in slashing within Livepeer.
+在以太坊生态系统中构建的一个好处是，您可以在其他协议（如Truebit和Swarm / SWEAR）之上构建网络效果。 不幸的是，依赖于这些外部系统本身具有外部依赖性和激励性，其中一个协议的缺陷或弱点可能会导致Livepeer中的削减。
 
-For example, if a Truebit verification job sat in their queue for a long period of time without any solver or verifier claiming it, Livepeer would fail to see the result of that verification in time before `Reward()` was called. Or if the Swarm network suffered a partition and couldn’t propagate the file to the Truebit verifier in time, then this could also create an issue.
+例如，如果Truebit验证作业在其队列中长时间没有任何解算器或验证者声明它，Livepeer将无法在调用`Reward（）`之前及时看到该验证的结果。 或者，如果Swarm网络遇到分区并且无法及时将文件传播到Truebit验证程序，那么这也可能会产生问题。
 
-These risks can be mitigated by incentivizing these roles to be played in house by participants in the Livepeer protocol, who may find it in their best interest to serve as Truebit verifiers or Swarm nodes. But there’s also another approach which is introducing the concept of probability thresholds on the slashing parameters. Optional protocol variables such as `VerificationFailureThreshold` could be set to indicate that as long as the node passes 99% of verifications they won’t be slashed for example. This will remain a further area of research to be worked out prior to network deployment.
+这些风险可以通过激励Livepeer协议中的参与者在内部播放这些角色来缓解，他们可能会发现它们最适合作为Truebit验证者或Swarm节点。 但是还有另一种方法是在削减参数上引入概率阈值的概念。 可以设置可选的协议变量，例如`VerificationFailureThreshold`，以指示只要节点通过99％的验证，它们就不会被削减。 这将是网络部署之前需要研究的另一个研究领域。
 
-The failure to invoke verification slashing condition can be checked and invoked by any Livepeer protocol participant. There is a `FinderFee` which specifies the percent of the slash amount which the finder will receive as a reward for successfully invoking this slashing condition.
+任何Livepeer协议参与者都可以检查和调用无法调用验证削减条件。 有一个`FinderFee`指定查找器将收到的斜线量的百分比，作为成功调用此削减条件的奖励。
 
-The remainder of the slashed funds will enter the `CommonPool`, which can be burned or allocated to common uses such as further ecosystem development, according to the governance mechanism of the protocol.
+根据协议的治理机制，剩余的大幅削减资金将进入`CommonPool`，可以被烧毁或分配给诸如进一步的生态系统发展等共同用途。
 
-### Token Distribution
+### 令牌分发
 
-As a token that represents the ability to participate and perform work in the network through a DPoS staking algorithm, the initial Livepeer token distribution will follow the patterns of other DPoS systems which require a widely distributed genesis state.
+作为表示通过DPoS标记算法参与和执行网络工作的能力的标记，初始Livepeer标记分布将遵循需要广泛分布的创世状态的其他DPoS系统的模式。
 
-An initial allocation of the token will be distributed to the community at genesis and over the early stages of the network. Receipients can use it to stake into the role of Transcoder or Delegator. A portion will be allocated to groups who contributed prior work and money towards the protocol before the genesis, and a portion will be endowed for the long term development of the core project.
+令牌的初始分配将在创世纪和网络的早期阶段分发给社区。 收件人可以使用它来担任Transcoder或Delegator的角色。 一部分将分配给在起源之前为协议提供先前工作和资金的小组，并且一部分将被赋予核心项目的长期发展。
 
-At the launch of the network, token issuance will continue according to an inflationary schedule with token being generated at `InflationRate` per round relative to the outstanding float of token. As token is issued in proportion to stake of all bonded participants in the protocol, it serves to incentivize active participation. Participants are "protected" from this inflation, due to earning their proportional share. It is only inactive participants who are sitting on token without bonding it for participation, who will see their proportional network ownership dilluted by this inflation.
+在网络启动时，令牌发布将根据通货膨胀计划继续进行，其中令牌在每轮`InflationRate`处生成，相对于令牌的未完成浮动。 由于令牌是按照议定书中所有参与者的股份比例发放的，因此可以激励积极参与。 由于获得了比例份额，参与者受到这种通货膨胀的“保护”。 只有不活跃的参与者才会坐在令牌上，而不会将其与参与者联系起来，他们会看到他们的比例网络所有权因这种通货膨胀而减少。
 
-The initial target for `InflationRate` will be set such that it aims to incentivize approximately `ParticipationRate` of the LPT to be bonded and actively participating [[19](#references)). For example, if `ParticipationRate` is 50% then incentives will exist to have half the oustanding token bonded. The inflation rate will move algorithmically each round to incent the participation target. A higher inflation rate would incent more token to be bonded, and a lower rate would lead to more people choosing liquidity rather than participation. It's this liquidity preference vs network ownership percentage tradeoff which should find equilibrium due to a number of economic factors in the network.
+
+`InflationRate`的初始目标将被设置为其目的是激励LPT的大约`ParticipationRate`被绑定并积极参与[[19]（＃references））。 例如，如果`ParticipationRate`为50％，则存在激励以使一半的优秀代币被绑定。 通货膨胀率将在每轮算法上移动以提升参与目标。 较高的通货膨胀率会增加更多的保护标记，较低的税率将导致更多的人选择流动性而不是参与。 这是流动性偏好与网络所有权百分比权衡，由于网络中的许多经济因素，它应该找到均衡。
 
 ### 治理
 
 Livepeer协议中的治理角色有三个方面：
 
-1. Determine the burning or appropriation of common funds which were slashed from misbehaving nodes.
-2. Adjust network parameters to ensure a healthy, thriving network which is valuable to broadcasters.
-3. Invoke proposed protocol updates in a decentralized fashion.
+1. 确定从行为不当的节点中削减的共同资金的消耗或挪用。
+2. 调整网络参数以确保健康，蓬勃发展的网络，这对广播公司来说很有价值。
+3. 以去中心化的方式调用提议的协议更新。
 
-Many of the network parameters referenced in this document such as `UnbondingPeriod`, `RoundLength`, `ParticipationRate`, and `VerificationRate` are adjustable. Proposals for adjustments to these parameters can be submitted, and the governance process, including voting by transcoders in proportion to their delegated stake, will determine adoption of these changes automatically within the protocol. The detailed spec for governance is left for another document. [See more here](https://github.com/livepeer/wiki/wiki/Governance). 
+本文档中引用的许多网络参数，如`UnbondingPeriod`，`RoundLength`，`ParticipationRate`和`VerificationRate`都是可调整的。 可以提交对这些参数进行调整的提议，并且治理过程（包括代码转换器按其委托的比例进行投票）将确定在协议内自动采用这些更改。 治理的详细规范留给另一个文档。 [详见此处]（https://github.com/livepeer/wiki/wiki/Governance）。
 
 ## 攻击
 

@@ -71,11 +71,11 @@ Livepeer项目旨在提供完全去中心化，高度可扩展，和加密令牌
 
 用于广播直播视频的技术栈已经发展了很多年并且包含许多层。 广播公司需要在源头捕获视频，与媒体服务器接口以处理视频并将其转码为多种不同格式，通过网络分发视频，然后允许最终消费者以高感知质量播放视频。 当人们通过这个堆栈思考时会引入经济问题，例如应该是广播公司还是应该为转移视频而支付带宽的消费者。
 
-A typical live streaming platform today needs to support RTMP, HLS, Mpeg-Dash video formats in H.264 and VP8 codec. New codecs like H.265/HEVC, VP9, and AV1 will become more popular in the near future as consumers become more accustomed to higher video quality.  For HLS alone, [Apple suggests](https://developer.apple.com/library/content/documentation/General/Reference/HLSAuthoringSpec/Requirements.html#//apple_ref/doc/uid/TP40016596-CH2-SW1) bitrates from 145kb/s all the way up to 7800kb/s, in order to serve the different types of devices under different conditions. All of this adds a significant amount of complexity and cost to live video broadcasting.
+目前，一个典型的流媒体直播平台需要支持RTMP、HLS、Mpeg-Dash视频格式的H.264和VP8编解码器。像H.265/HEVC、VP9和AV1这样的新编解码器将在不久的将来变得更受欢迎，因为消费者将更习惯于更高的视频质量。仅对于HLS， [Apple建议案](https://developer.apple.com/library/content/documentation/General/Reference/HLSAuthoringSpec/Requirements.html#//apple_ref/doc/uid/ tp40016586 - ch2 - sw1)位速率从145kb/s一直到7800kb/s，以便在不同的条件下为不同类型的设备提供服务。所有这些都增加了视频直播的复杂性和成本。
 
-The existing decentralized development stack (web3) contains solutions for some of the layers required for a live video platform, like file transfer and payments, but currently there are no solutions for the capture and interface, transcoding and processing, and serving layers of live video. For this, Livepeer introduces the [Livepeer Media Server (LPMS)](https://github.com/livepeer/wiki/wiki/Livepeer-Media-Server) - an open source implementation of a media server which provides all of the live video specific functionality necessary for DApp developers and existing broadcasters to build live functionality into their applications. [Read more about it here](https://github.com/livepeer/wiki/wiki/Livepeer-Media-Server).
+现有的分散式开发堆栈(web3)包含了实时视频平台所需的一些层的解决方案，比如文件传输和支付，但是目前还没有针对实时视频的捕获和接口、代码转换和处理以及服务层的解决方案。为此，Livepeer引入了[Livepeer Media Server (LPMS)](https://github.com/livepeer/wiki/wiki/Livepeer-Media-Server)——一个媒体服务器的开源实现，它提供了DApp开发人员和现有广播公司在其应用程序中构建live功能所需的所有实时视频特定功能。[详情请点击这里](https://github.com/livepeer/wiki/wiki/Livepeer-Media-Server)
 
-As a standalone application, any developer could build a live application on top of the LPMS, but it would still be centralized and would need to be scaled through traditional means. However when every node on the Livepeer network is running the LPMS, and the protocol’s economic incentives ensure that those nodes will contribute their processing power and bandwidth in service of transcoding and distributing live video, **a self-scaling, pay-as-you-go network is made available to developers, who can simply send their live stream into the network, and have the implementation details of scaling, payment, and media hosting abstracted away**.
+作为一个独立的应用程序，任何开发人员都可以在LPMS之上构建一个活动的应用程序，但是它仍然是集中式的，并且需要通过传统的方法进行扩展。然而，当Livepeer网络上的每个节点都运行LPMS时，协议的经济激励机制确保这些节点将贡献它们的处理能力和带宽，为实时视频的编码和分发服务， **开发人员可以使用自伸缩、即付即用的网络，他们只需将实时流发送到网络中，就可以抽象出伸缩、支付和媒体托管的实现细节**.
 
 ## Livepeer协议 ###########################################
 
@@ -133,9 +133,9 @@ Livepeer Token（LPT）是Livepeer网络的协议令牌。 但它不是交换令
 
 | 系统的作用 | 描述 |
 |-------|----------|
-| **Swarm** | Content addressed storage platform. Data can be guaranteed to be available there temporarily during the verification process via SWEAR protocol [[7, 12](#references)]. *(Note in this document we refer to Swarm, but other content addressed storage platforms can be substituted if data availability can be guaranteed with high probability).* |
-| **Livepeer Smart Contract** | Smart contract running on the Ethereum network [[1](#references)]. |
-| **Truebit** | Blackbox verification protocol that guarantees correctness of computation placed on chain (at a hefty cost) [[6](#references)]. (<http://truebit.io>) |
+| **Swarm** | 内容寻址存储平台。可以通过SWEAR协议[[7,12](#references)]保证数据在验证过程中暂时可用。 *(注意，在本文档中，我们指的是Swarm，但是如果数据可用性能够得到高概率的保证，则可以替换其他寻址存储平台的内容)。* |
+| **Livepeer Smart Contract** | 在以太网络上运行的智能契约[[1](#references)]。 |
+| **Truebit** | 黑盒验证协议，它保证了链上计算的正确性(代价很高)[[6](#references)]。(< http://truebit.io >)|
 
 下面是角色的可视化概述，以及它们在下面描述的工作验证过程中相互通信的方式。
 

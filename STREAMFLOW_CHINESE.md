@@ -1,6 +1,6 @@
 # Livepeer Streamflow Paper
 
-**Livepeer Scalability on Ethereum through Orchestration, Probabilistic Micropayments, and Offchain Job Negotiation**
+**在以太坊上通过编排、概率微支付和离线作业协商实现Livepeer可伸缩性**
 
 **作者**    
 Doug Petkanics <doug@livepeer.org>    
@@ -11,17 +11,17 @@ Eric Tang <eric@livepeer.org>
 Philipp Angele <philipp@livepeer.org>    
 Josh Allmann <josh@livepeer.org>
 
-**STATUS: PROPOSAL - Feedback and review is requested on this early proposal.**
+**状态: 提案-要求对这个早期提案进行反馈和审查。**
 
 ## 摘要 #####################################
 
-The Streamflow proposal introduces updates to the Livepeer protocol and offchain implementations which will allow Livepeer to scale beyond the current limitations of the alpha protocol deployed to the Ethereum blockchain. It suggests updates that address affordability, reliability, performance, and scalability of the network. Key elements are introduced including a service registry, an offchain job negotiation and payments mechanism, a split between orchestration nodes and transcoding nodes, the elimination of the data availability problem solution as a dependency on trustless verification, and the opening up of the number of nodes that can compete to perform work on the network from the low arbitrary limits during the alpha. The resulting architecture will allow users of the network to perform high scale transcoding jobs on the network across many concurrent work providers, while significantly reducing the impact of the underlying blockchain's demand and price volatility on the economic viability of using the network. 
+Streamflow提议引入了对Livepeer协议和离线实现的更新，这将允许Livepeer扩展到超出部署到Ethereum区块链的alpha协议的当前限制。它建议对网络的可负担性、可靠性、性能和可伸缩性进行更新。介绍了关键要素包括服务注册中心,一个offchain工作谈判和支付机制,编制节点之间的分裂和代码转换节点,消除数据可用性问题的解决方案作为一个依赖不可靠的验证,和开放的节点数量,可以执行工作竞争低的网络上的任意限制在阿尔法。由此产生的体系结构将允许网络用户跨许多并发工作提供者在网络上执行大规模的代码转换工作，同时显著降低底层区块链的需求和价格波动对使用网络的经济可行性的影响。
 
 ## 目录 ###########################################
 
-* [Introduction and Background](#introduction-and-background)
-* [Streamflow Protocol Proposal](#streamflow-protocol-proposal)
-    * [Orchestrators and Transcoders](#orchestrators-and-transcoders)
+* [介绍和背景](#introduction-and-background)
+* [Streamflow协议建议](#streamflow-protocol-proposal)
+    * [协调器和转换](#orchestrators-and-transcoders)
     * [Relaxation of Transcoder Limit and Stake Enforced Security](#relaxation-of-transcoder-limit-and-stake-enforced-security)
     * [Service Registry](#service-registry)
     * [Offchain Job Negotiation](#offchain-job-negotiation)
@@ -39,13 +39,13 @@ The Streamflow proposal introduces updates to the Livepeer protocol and offchain
     * [Non Deterministic Verification](#non-deterministic-verification)
     * [Public Transcoder Pool Protocols](#public-transcoder-pool-protocols)
     * [Broadcaster Doublespend Mitigation](#broadcaster-doublespend-mitigation)
-    * [VOD Payments](#vod-payments)
-* [Migration Path](#migration-path)
-* [Appendix](#appendix)
-    * [Appendix A: Probabilistic Micropayments Workflow](#appendix-a-probabilistic-micropayments-workflow)
-* [References](#references)
+    * [视频点播支付](#vod-payments)
+* [迁移路径](#migration-path)
+* [附录](#appendix)
+    * [附录A:概率微支付工作流](#appendix-a-probabilistic-micropayments-workflow)
+* [参考文献](#references)
 
-## Introduction and Background ###########################################
+## 介绍和背景 ###########################################
 
 The Livepeer protocol incentivizes and secures a decentralized network of video transcoding nodes. Users who would like to transcode video can submit a job to the network at a price they determine to be acceptable, be assigned a transcoder, have the video transcoding performed with economically secured guarantees of accuracy. The live protocol uses a delegated-stake based mechanism for electing the nodes who are deemed reliable and high quality enough to perform live video encoding in a timely and performant manner. 
 
@@ -65,7 +65,7 @@ This paper describes the conceptual protocol changes and analyzes their impact, 
 _Note: To properly absorb the protocol updates, it's important to have an understanding of how the current Livepeer protocol works, as described in the Whitepaper [[1](#references)]._
 
 
-## Streamflow Protocol Proposal #################################
+## Streamflow协议的建议 #################################
 
 This proposal introduces a number of changes and new concepts into the Livepeer ecosystem. Each delivers impacts across one or many of the areas of affordability, performance, reliability, or scalability. They include:
 
@@ -76,7 +76,7 @@ This proposal introduces a number of changes and new concepts into the Livepeer 
 * Offchain payments using Probabilistic Micropayments, with on chain settlement and security deposits.
 * Updated verification flow, in which on chain verification only needs to occur in the case of an observed fault.
 
-### Orchestrators and Transcoders
+### 协调器和转换器
 
 Currently a Transcoder on the Livepeer network is a protocol-aware node that both watches and interacts with the blockchain protocol and performs video transcoding work. In short, it both orchestrates work on the network, and transcodes video. This can create performance and reliability issues, and make it difficult for nodes to scale their operations. Streamflow proposes a two tiered architecture, which contains a split between:
 
@@ -135,10 +135,10 @@ One of the benefits of the minimum stake models is that as fees flow through the
 
 Streamflow expands the role of the Service Registry in the on chain protocol. Orchestrators will continue to advertise their `rewardCut`, `feeShare`, and connection information, however they will also advertise the services that their node is offering, and region(s) their node is serving. This will lead to performance impacts and Broadcasters can look for the specific services they want, served by a nearby node. Orchestrators will no longer advertise the price that they are charging, as price and availability negotiation is moving off chain. As for considered services, there are likely two abstractions:
 
-1. **Service**
+1. **服务**
     1. Service identifier - the id that represents this particular service, such as “CPUTranscoding”, “GPUTranscoding”, or “SegmentVerification". There is still work to be done on the exact definition here, and it’s possible the services are more granular such as input/output encoding pairs such as “H264 1080p -> 720p”. 
     1. Verification function - the address pointer to the verification function which will be run to invoke on chain verification of the correctness of this service (can be null if there is no verification available). 
-1. **Locations**
+1. **位置**
     1. Implementation is TBD, but this is likely an abstraction that specifies an array of the regions that this node is willing or able to serve. 
 
 The combination of advertising these will allow Broadcasters to filter the Service Registry for nodes whom are advertising the services and locations that they would like to serve in order to be efficient in beginning an offchain negotiation with the proper service providers. Location was a previously ignored factor in the alpha version of Livepeer, however it can be critical for live video ingest that the nodes receiving the video are located in close proximity to the video source, due to various networking issues that can occur and create instability over longer connections with more hops.
@@ -147,13 +147,13 @@ An advertised location can of course be falsified, however, like many aspects of
 
 As nodes earn inflationary LPT, in order to put it to optimized use, the most effective thing they can do is add a new node to the service registry which serves a capability or location for which there is demand, but not enough reliable or cost effective supply - therefore expanding the footprint of the network and ability to serve various customers and use cases. 
 
-### Offchain Job Negotiation
+### Offchain谈判工作
 The shift from on chain job assignment to off chain job negotiation is perhaps the biggest change proposed by Streamflow. It changes the assumption that jobs are routed strictly according to stake, and this will be analyzed below in the analysis section, but it also comes with tremendous benefits. Namely:
 
-* **Availability** - Broadcasters will be able to ensure that Orchestrators are available to do work before contracting with them.
-* **Redundancy** - If an Orchestrator is unavailable before or during the job, simply switch to another Orchestrator. Or begin working with multiple orchestrators in the first place for redundancy.
-* **Speed** - Begin work immediately. There is no need to wait for an on chain confirmation.
-* **Cost effective** - There is no on chain job or gas costs associated with requesting service on the network.
+* **可用性** - Broadcasters will be able to ensure that Orchestrators are available to do work before contracting with them.
+* **冗余** - If an Orchestrator is unavailable before or during the job, simply switch to another Orchestrator. Or begin working with multiple orchestrators in the first place for redundancy.
+* **速度** - Begin work immediately. There is no need to wait for an on chain confirmation.
+* **成本效益** - There is no on chain job or gas costs associated with requesting service on the network.
 
 In order to conduct a negotiation, a Broadcaster will interact with the following protocol:
 
@@ -178,7 +178,7 @@ Switching and adding redundancy does not introduce any on chain transaction cost
 Note that steps 1-4 can optionally be performed in the background on an ongoing basis, rather than at stream inception. If a Broadcaster is handling many concurrent streams, they may find it worth it to keep an up to date price/service table for all available Orchestrators, such that they can just begin working with one at any moment on any stream.
 
 
-### Probabilistic Micropayments
+### 概率小额支付
 The largest impact on cost savings from Streamflow will come from this Probabilistic Micropayments (PM) proposal. Formerly, the protocol used a deposit() -> job() -> claim() -> verify() -> distributeFees() transaction flow to release payments for performed work. The last three of these transactions needed to be performed for every 1000 segments of video on average (or more), and doing five transactions for a short job would be completely cost prohibitive for Transcoders.
 
 For background on PM, it is suggested to review a post from the Orchid Protocol team on its use in a decentralized VPN network, as well as the previous academic research[[3, 4, 5](#references)]. The summary is that the Broadcaster issues signed tickets along with every single segment of work to the Orchestrator. The ticket has a high face value if it “wins”, allowing the Orchestrator to cash it in on chain for that high amount. However, the probability of it winning is very low, so the expected value of each ticket is the price/segment that the Broadcaster and Orchestrator agree upon. Over the long term, Broadcasters will pay nearly exactly what they agree per segment to Orchestrators, and Orchestrators will be paid nearly exactly the correct amount for the work they performed, due to the probabilities at work.
@@ -191,7 +191,7 @@ Due to the offchain job negotiation and potential redundancies a Broadcaster may
 
 The full PM workflow is left for [an appendix](#appendix), since it touches on verification, off chain negotiation and many other areas such as double spend risk and mitigation.
 
-### Fault-based On Chain Verification
+### 基于故障的链验证
 The final major change proposed by Streamflow is to adjust the verification protocol in order to reduce costs and avoid the data availability problem. Previously, transcoders were required to invoke Truebit verification for 1 out of every `VerificationRate` segments, which was set to 1 out of 1000 segments originally. This is very expensive, and is required whether the Transcoder did the work correctly or incorrectly. The new proposal is that:
 
 * Broadcasters are responsible to verify received transcoded segments, and only challenge them to Truebit on chain if they believe that the segment failed verification.
@@ -206,11 +206,11 @@ The key point however, is that the Orchestrator doesn’t know which segments wi
 One impact of this is that the cost of Truebit doesn’t need to be incurred, except in the case of obvious cheating - and hence almost never, since it should never be worth it for an orchestrator to intentionally cheat. This makes the network far cheaper to use, than the cost of invoking Truebit on every `verificationRate` segments of video. 
 
 
-## Economic Analysis #################################
+## 经济分析 #################################
 
 The changes proposed by Streamflow lead to slightly different incentives and behaviors for both Orchestrators and Delegators, resulting in what will be a more scalable, reliable, cost effective network. This section begins an economic impact analysis of these proposed changes, including a look at the role of the Livepeer Token, the role of delegation, how inflation effects the network, and some offchain economic considerations.
 
-### Livepeer Token
+### Livepeer代币
 
 The Livepeer Token (LPT) could always be described as a work token. Those who staked it had the opportunity to perform work on the network, and therefore earn the future fees (in ETH) for doing said work. Work was routed in direct proportion to stake, if prices offered by all nodes were constant. There were conceived mechanisms from the beginning for a “work requirement”, in that if a node did not perform enough work within some threshold proportion of their stake, then they could be slashed. This was an attempt at ensuring that nodes would actually contribute value (or incur overhead tax for not doing so or faking it), rather than just sit idly on stake and accrue inflation. In addition, there was no requirement that work be done cost effectively or in a performant manner. Competition could be socially encouraged, but not enforced at a protocol level.
 
@@ -236,14 +236,14 @@ Which will be the visible statistic that Delegators can use to compare Orchestra
 
 But then it is worth noting that the act of switching more stake onto this opportunistic node, means that the fees will be split amongst more stake, and the fee ratio will decrease. The equilibrium state is that nodes who are performing more work (earning more) have more stake, and nodes performing less work with same fee share have less stake. Essentially all competitive nodes should end up with the same equilibrium fee ratios, with intelligently delegated stake earning a Delegator the equilibrium return - and hence staked LPT intelligently applied yields access to do work to earn fees on the network independently of how jobs are assigned.
 
-### Delegation as Security and Reputational Signal
+### 授权是安全和声誉的信号
 
 One negative outcome people could foresee is that nodes who are winning a lot of work could provide 0% fee share, and hence not attract any delegation. This is ok - they are running hardware and incurring costs, and providing great service to the network - they may not need delegation. But delegation on the other hand provides additional security - it is more stake that can be slashed if the node cheats - more reputational signal. Clients use this signal to select nodes to work with, and so a competitive node advertising a > 0% fee share would be more likely to attract stake, and hence work - as long as they can perform it competitively or better or cheaper than the 0% fee share node. Again, this contributes to the flexible setups and use cases of the network. It increases the opportunity for competition, decentralization, diversity, and resilience of the network.
 
 As new nodes are looking to compete to do work on the network, they may need to attract enough stake to offer the security required by Broadcasters. In these cases, it is likely that these nodes would set a greater fee share. Active delegators will have the opportunity to search for and stake towards nodes that are winning outsized portions of works, with greater fee shares, resulting in higher fee ratios. In short, delegated stake can provide security and route work, in exchange for fees shared back when the work is performed well. Active delegation can lead to giving more opportunistic nodes the ability to expand the footprint and capabilities of the network in a competitive way.
 
 
-### Inflation into Bonded State and Apathetic Delegators
+### 通货膨胀变成了束缚和冷漠的代表
 One of the criticisms of the uncapped stake model with no minimum stakes is that it enables lazy behavior on behalf of the delegators. Inflationary LPT continues to accrue into the bonded state, continues to compound, and allows a delegator to set-it-and-forget-it while collecting LPT without adding significant value to the network. 
 
 This may be the case in the very early days of the network, before fees serve as an additional incentive for delegators to take action, but is unlikely to yield a maximal result when Orchestrators are competing to do work, earn, and distribute fees. At this point, autopilot behavior may still lead to accruing LPT, but would be forgoing the potential fees that could be earned by switching to Orchestrators who are yielding a higher ETH/staked LPT ratio. 
@@ -252,7 +252,7 @@ As the inflation rate is likely to decrease under scaled usage, when token holde
 
 Additionally, as Orchestrators who once needed to attract outside delegation in order to achieve the minimum stake, accrue enough stake themselves to secure their own node, they may decrease their fee share. At this stage, an optimizing delegator would be best served by seeking out a new up-and-coming node - essentially one who can expand the footprint of the network - who may be offering a higher fee share in order to attract stake. It's this constant QA performed by the optimizing Delegator, and stake-for-fee tradeoff which will create constant competition and further the decentralization of the network.
 
-### Offchain Engineering Considerations
+### Offchain工程注意事项
 As previously mentioned, one of the core philosophies within Streamflow is to move many of the opinions about valid parameter values and p2p interactions out of the core protocol and into client implementations and configurations. Multiple implementations and configurations of these parameters will lead to a robust network that is resillient to attacks and malicious actors. However since the protocol itself is less opinionated, a lot is left up to client implementation. Here are some of the major considerations that need to be undertaken from an engineering perspective to make Streamflow work really effectively out of the box:
 
 * PM risk management policies - when an Orchestrator should work with or not work with a Broadcaster based upon reputation and history, and vice versa.
@@ -265,10 +265,10 @@ As previously mentioned, one of the core philosophies within Streamflow is to mo
 Each of the above can effect the efficiency of the network from the perspective of a Broadcaster - and hence the necessary redundancies, and eventually costs. The good news is that much of the above can be handled via off chain strategies, and can be constantly experimented with across different competing implementations or configurations. A network that has agents acting in different and unpredictable ways is harder to optimize for an attacker who would otherwise be looking to game a single implementation. 
 
 
-## Attacks ###############################
+## 攻击 ###############################
 Some of the specific sub-protocols, such as PM’s and Truebit based verification are subject to their own attacks, which we leave for analysis within those areas of research. Here is some brief discussion of potential attacks and countermeasures within the economics of the Streamflow changes to the protocol.
 
-### Delegator Squeezing
+### 代表挤压
 
 When a candidate Orchestrator would like to operate a node and express their candidacy, they may need to attract delegation in order to reach the client specified minimum deposit amount to attract mainstream work. To do so, they may represent an attractive `RewardCut` and `FeeShare`. However, as their node begins to perform work, and they start to earn inflationary LPT, they may wish to use this LPT to stake more towards their single node in order to reduce the amount of inflation and fees they need to share with their delegators. To do so, they may drive off current delegators by manipulating their `RewardCut` and `FeeShare` to an unattractive point, and then filling the gap with their own stake.
 
@@ -276,24 +276,24 @@ This is theoretically ok, as delegators can move on to more attractive nodes and
 
 One belief is that Orchestrators who would like to run additional nodes, maintain a positive reputation to attract significant delegation, and compete for fees, will have their reputation harmed by this approach and will not attract future delegation.
 
-### Delegator Fee Theft
+### 代理人费用盗窃
 
 As mentioned in the Delegator Squeezing Attack above, it is possible for the Orchestrator to drive off its delegates. This could become a particularly malicious technique if the Orchestrator also holds onto its winning PM tickets until the point when the delegators leave, and then cashes them when it contains all the stake for its node. Essentially the fees and rewards that the delegates are entitled to would be delivered to the Orchestrator instead.
 
 This can be counteracted by having expiration dates on the PM tickets, which occur prior to the withdrawal date on the Broadcasters time-locked deposits. As such, the tickets would need to be cashed in short order, and would potentially contain the committed fee share of the Orchestrator at the time, such that when cashing a winning ticket the appropriate splits could be made amongst delegators and the Orchestrator.
 
 
-## Open Research Areas ############################
+## 开放研究领域 ############################
 
 As with all work in the early field of blockchain based crypto economic protocols, there are still many research problems which need to be persued before the systems can achieve full decentralization, trustlessness, and economic efficiency. Here are a couple areas that the project is actively conducting research in. Community participation is welcome in pressing forward on these areas as well.
 
-### Non Deterministic Verification
+### 非确定性验证
 
 Work continues on the research to verify the likelihood that a GPU encoded segment represents the same content as the pre-encoded segment. This probabilistic and metrics driven approach has been shown in experiments and early research to yield accurate scores, however the suitability for actually slashing deposits based upon probabilistic outcomes is certainly debatable and requires further research.
 
 Deterministic encoding on the other hand can continue to be checked by a variety of verification schemes including Truebit, SGX based hardware verification, Oracles, or even trusted verifiers.
 
-### Public Transcoder Pool Protocols
+### 公共转码器池协议
 
 The split between orchestration responsibilities and transcoder responsibilities should help to dramatically scale the operations of nodes on Livepeer, by leveraging idle hardware to transcode video, without necessarily requiring all those machines to be Livepeer aware 24/7 operating, staked nodes. It is believed that private pools, where the Orchestrator also contains this transcoding hardware, will be the most cost effective, because the Orchestrator can trust that the result that comes out of the transcoders is correct and not malicious.
 
@@ -305,7 +305,7 @@ Further research and design here is an open topic.
 
 In a probabilistic micropayments scheme, there is always a chance with some probability that a Broadcaster has issued more winning tickets than they have balance to pay (accidentally). And since Orchestrators may not notify the Broadcaster of a winning ticket immediately, it is hard to get an accurate accounting of a Broadcaster's balance. We're continuing research on the required parameters and deposit management to avoid an accidental double spend under various usage patterns in the network. See further analysis in the Probabilistic Micropayments appendix.
 
-### VOD Payments
+### 视频点播支付
 
 One of the nice properties that Broadcasters may look for when it comes to video-on-demand transcoding is the notion that they can make the content available, request a job, and disappear - such that the Orchestrator can perform the job asynchronously, distribute it across many nodes, or schedule it when they have idle resources available.
 
@@ -313,7 +313,7 @@ However, in the PM scheme described in Streamflow, the Broadcaster needs to be o
 
 For VOD jobs though, if a Broadcaster pays up front for all segments of video and then disappears offline, there is no security to guarantee that the Orchestrator will perform the transcoding or make the transcoded segments available back to the Broadcaster. For now, VOD transcoding is possible, but upload-and-disappear is not. Research will continue on better mechanisms to enable VOD payments.
 
-## Migration Path ############################
+## 迁移路径 ############################
 
 The Streamflow proposal is early on in its research, design, feedback, and implementation cycle. It certainly deserves a thorough community critique, testing, audits, and acceptance prior to going live on the Ethereum main net as the next iteration on top of Livepeer's alpha protocol. This section aims to list out a couple early considerations with regards to how a protocol migration could occur:
 
@@ -327,16 +327,16 @@ The Streamflow proposal is early on in its research, design, feedback, and imple
 
 A formal migration path, checklist, and multiple observed testnet runs will be made available over time as the candidate Streamflow release date nears.
 
-## Summary #################################
+## 总结 #################################
 
 In conclusion, the proposals contained within this document aim to shine a light on a scalable path for Livepeer's video infrastructure network - one that decouples the cost of using the Ethereum blockchain from the cost of using the network itself, and that provides existing scaled video developers with the reliability and performance that they require from their infrastructure.
 
 All feedback, ideas, and input are welcomed, so please do not hesitate to drop into [The Livepeer Forum](https://forum.livepeer.org) or [Discord Chat](https://discord.gg/RR4kFAh) to participate.
 
 
-## Appendix ################################
+## 附录 ################################
 
-### Appendix A: Probabilistic Micropayments Workflow
+### 附录 A: 概率微支付工作流程
 
 * An orchestrators security deposit is their stake. This can get slashed if they cheat and fail a verification.
 * A broadcaster (using this term for general user, which may be more of a developer than broadcaster) places a time-locked deposit to cover the future work that they’ll pay for on the network.

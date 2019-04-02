@@ -2,22 +2,22 @@
 
 **Livepeer Scalability on Ethereum through Orchestration, Probabilistic Micropayments, and Offchain Job Negotiation**
 
-**Authors**    
+**作者**    
 Doug Petkanics <doug@livepeer.org>    
 Yondon Fu <yondon@livepeer.org>
 
-**Researchers**    
+**研究人员**    
 Eric Tang <eric@livepeer.org>    
 Philipp Angele <philipp@livepeer.org>    
 Josh Allmann <josh@livepeer.org>
 
 **STATUS: PROPOSAL - Feedback and review is requested on this early proposal.**
 
-## Abstract #####################################
+## 摘要 #####################################
 
 The Streamflow proposal introduces updates to the Livepeer protocol and offchain implementations which will allow Livepeer to scale beyond the current limitations of the alpha protocol deployed to the Ethereum blockchain. It suggests updates that address affordability, reliability, performance, and scalability of the network. Key elements are introduced including a service registry, an offchain job negotiation and payments mechanism, a split between orchestration nodes and transcoding nodes, the elimination of the data availability problem solution as a dependency on trustless verification, and the opening up of the number of nodes that can compete to perform work on the network from the low arbitrary limits during the alpha. The resulting architecture will allow users of the network to perform high scale transcoding jobs on the network across many concurrent work providers, while significantly reducing the impact of the underlying blockchain's demand and price volatility on the economic viability of using the network. 
 
-## Table of Contents ###########################################
+## 目录 ###########################################
 
 * [Introduction and Background](#introduction-and-background)
 * [Streamflow Protocol Proposal](#streamflow-protocol-proposal)
@@ -357,12 +357,12 @@ All feedback, ideas, and input are welcomed, so please do not hesitate to drop i
     
 For a full analysis and specification of the ticket data structures, double spend prevention, and other design considerations, see this [external document](https://hackmd.io/uHMFeNSyS_GyzwnO3Ld74A?view).
 
-## References ###########################################
+## 参考文献 ###########################################
 
-1. Livepeer Whitepaper - Doug Petkanics, Eric Tang - <https://github.com/livepeer/wiki/blob/master/WHITEPAPER.md>
-2. The Video Miner, A Path To Scaling Video Transcoding -Philipp Angele  - <https://medium.com/livepeer-blog/the-video-miner-a-path-to-scaling-video-transcoding-a3487d232a1>
-3. Ethereum Probabilistic Micropayments - Gustav Simonson - <https://medium.com/@gustav.simonsson/ethereum-probabilistic-micropayments-ae6e6cd85a06>
-4. Electronic Lottery Tickets as Micropayments - Ron Rivest - MIT Lab for Computer Science - <https://people.csail.mit.edu/rivest/pubs/Riv97b.pdf>
-5. Decentralized Anonymous Micropayments - A. Chiesa, M. Green, J. Liu, P. Miao, I. Miers and P. Mishra - <https://eprint.iacr.org/2016/1033.pdf>
+1. Livepeer白皮书 - Doug Petkanics, Eric Tang - <https://github.com/livepeer/wiki/blob/master/WHITEPAPER.md>
+2. 视频挖掘器，用于扩展视频代码转换的路径 -Philipp Angele  - <https://medium.com/livepeer-blog/the-video-miner-a-path-to-scaling-video-transcoding-a3487d232a1>
+3. 以太坊小额支付 - Gustav Simonson - <https://medium.com/@gustav.simonsson/ethereum-probabilistic-micropayments-ae6e6cd85a06>
+4. 电子彩票作为小额支付 - Ron Rivest - MIT Lab for Computer Science - <https://people.csail.mit.edu/rivest/pubs/Riv97b.pdf>
+5. 分散的匿名小额支付 - A. Chiesa, M. Green, J. Liu, P. Miao, I. Miers and P. Mishra - <https://eprint.iacr.org/2016/1033.pdf>
 
 

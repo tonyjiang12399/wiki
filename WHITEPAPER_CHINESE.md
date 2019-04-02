@@ -19,7 +19,7 @@ Livepeer项目旨在提供完全去中心化，高度可扩展，和加密代币
     * [Livepeer代币](#livepeer-token)
     * [协议角色](#protocol-roles)
     * [共识](#consensus)
-    * [绑定+授权](#bonding--delegation)
+    * [绑定+委托](#bonding--delegation)
     * [转码器() 事务](#transcoder-transaction)
     * [广播+转码工作](#broadcast--transcoding-job)
         * [预处理](#preprocessing)
@@ -152,7 +152,7 @@ Livepeer有一个两层共识系统。 LPT分类账和交易由底层区块链�
 管理新生成的代币的第二级共识是基于委托的证明证明（DPOS），受Bitshares，Steem，Tendermint和Casper [[5,9,10,11]（＃references）]等系统的启发。 验证器在网络中的作用由转码器完成。 任何用户都可以将他们的利益委托给代码转换器，代码转换器然后需要在网络中执行转码作业，参与工作验证协议，并以特定的时间间隔在链上调用函数来验证这项工作。 该协议将分配费用和新生成的代币，它将削减行为不端的演员的利益。 验证结果将在执行验证后通过Truebit在链上进行记录，因此广播公司和代码转换器之间不存在争议的余地。
 
 
-### 绑定+授权
+### 绑定+委托
 
 在Livepeer中，为了表明网络中的利益，节点必须绑定一定数量的LPT。 他们通过`Bond（）`交易来做到这一点，这将把他们在智能合约中的股份捆绑起来，直到他们`Unbond（）`，此时他们将进入一个无约束状态，这将持续“UnbondingPeriod”时间。 完成“UnbondingPeriod”后，他们可以撤回他们的LPT。
 

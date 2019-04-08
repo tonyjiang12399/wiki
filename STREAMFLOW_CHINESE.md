@@ -1,4 +1,4 @@
-# Livepeer Streamflow Paper
+# Livepeer Streamflow 白皮书
 
 **在以太坊上通过编排、概率微支付和离线作业协商实现Livepeer可伸缩性**
 
@@ -47,16 +47,16 @@ Streamflow提议引入了对Livepeer协议和离线实现的更新，这将允�
 
 ## 介绍和背景 ###########################################
 
-The Livepeer protocol incentivizes and secures a decentralized network of video transcoding nodes. Users who would like to transcode video can submit a job to the network at a price they determine to be acceptable, be assigned a transcoder, have the video transcoding performed with economically secured guarantees of accuracy. The live protocol uses a delegated-stake based mechanism for electing the nodes who are deemed reliable and high quality enough to perform live video encoding in a timely and performant manner. 
+Livepeer协议激励和保护分散的视频编码节点网络。想要对视频进行代码转换的用户可以向网络提交一份工作，其价格是他们认为可以接受的，可以指定一个代码转换人员，可以在保证准确性的前提下执行视频代码转换。在线协议使用基于委托利害关系的机制来选择那些被认为足够可靠和高质量的节点，以便及时和高性能地执行在线视频编码。
 
 The alpha version of the protocol currently deployed on the Ethereum blockchain has implemented many of the designs originally specified in the [Livepeer Whitepaper](https://github.com/livepeer/wiki/blob/master/WHITEPAPER.md). The delegated stake based system, with its inflationary incentives, has shown to be effective in incentivizing participation, and creating an engaged early network of transcoders and delegators to perform transcoding work and QA accordingly. The network is usable, and for a number of use cases such as long running live transcoding, or decentralized app prototyping, is a viable option today in its early state. However, for the scaled usage of video infrastructure services, the alpha version suffers from the following weaknesses:
 
 1. Cost of using the network is too correlated to fluctuations in Ethereum gas pricing, and therefore at times of high gas prices, or encoding scenarios which require many transactions, the network becomes too expensive to be viable relative to centralized alternatives.
-1. Stake based job assignment and on-chain transcoder negotiation creates unreliable scenarios for the broadcaster - if their assigned transcoder goes offline, they incur additional costs and delays in negotiating for a second transcoder, which can be prohibitively disruptive in a live streaming context.
-1. The data availability problem remains unsolved (in production), and therefore verification of work can not be fully trustless and non-interactive. 
-1. Transcoders have no way of managing their availability to perform or not perform jobs depending upon capacity and workload beyond stake.
-1. While the network encourages price competition, it does not encourage performance competition and accountability directly.
-1. Current limitations of Ethereum gas limits and the protocol’s practical implementation restrict the number of active transcoders who can be active at any one time to a very low number, creating a high barrier to entry to compete for work on the network.
+2. Stake based job assignment and on-chain transcoder negotiation creates unreliable scenarios for the broadcaster - if their assigned transcoder goes offline, they incur additional costs and delays in negotiating for a second transcoder, which can be prohibitively disruptive in a live streaming context.
+3. The data availability problem remains unsolved (in production), and therefore verification of work can not be fully trustless and non-interactive. 
+4. Transcoders have no way of managing their availability to perform or not perform jobs depending upon capacity and workload beyond stake.
+5. While the network encourages price competition, it does not encourage performance competition and accountability directly.
+6. Current limitations of Ethereum gas limits and the protocol’s practical implementation restrict the number of active transcoders who can be active at any one time to a very low number, creating a high barrier to entry to compete for work on the network.
 
 The rest of this paper proposes solutions that address each of these weaknesses in turn. It leads off with a description of the architectural and protocol change proposals. It then analyzes the economic impacts of these changes on the network, before addressing the possible attacks. It moves on to acknowledge the open research areas which can contribute to taking this proposal from economic and social/reputation based security to strongly, cryptographically assured security. And it will finally conclude with some thoughts on a migration path from the alpha protocol to Streamflow in the live network, should the community wish to accept these changes.
 

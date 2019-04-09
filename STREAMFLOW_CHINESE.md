@@ -123,11 +123,11 @@ Streamflow提出的第二个主要更改是放松对活动Transcoders (Streamflo
 1. **将N(编配槽的#)从15扩展到更大的值，比如200**: 事情基本上会像今天这样工作，激活一个节点的进入壁垒要低得多。但这将使建立联系的相关行动更加昂贵。以太结垢和气体问题可能会发挥作用。
 2. **设置成为协调器所需的最小利害关系**: 这将建立一个最大可能的“N”,同时允许任何人知道如何实现这一安全栏和保持活跃集。它还将启用一个扩大网络协调器的通胀下生成的,并鼓励积极寻找新的潜在的协调器提供费用有股票,谁正在寻找超过最低成为活跃的工作竞争。
 3. **为任何协调器设置固定的利害关系**: 这将迫使编排器运行额外的节点，并使委托器不断地进行重新设置，以便使用它们的膨胀式LPT。但是，它在协调器和委托器的最终用户体验方面存在一些弱点，以及一些复杂的实现细节。
-4. **从协议中消除任何最小利害关系要求，并让客户端配置保护作业所需的利害关系**: This creates the most open access and is the most decentralized initially, however it offers the least coordination between token holding Delegators and Orchestrators aligning to create a high quality network - essentially reputation plays a larger role, and therefore it could lead to more centralization of the work performed over the longer term as delegators have less collective ability to route work.
+4. **从协议中消除任何最小利害关系要求，并让客户端配置保护作业所需的利害关系**: 这将创建最开放、最分散的最初,但是它提供了至少代币持有有之间的协调和协调器将创建一个高质量的网络——本质上名声扮演更重要的角色,因此它可能导致更多的集中的长期工作中有更少的集体能力有路由的工作。
 
-While the benefits and weaknesses of the above approaches are being considered, it's important to note that the result achieved from implementing any of the above will be an expanded Orchestrator network, more redundancies and competition provided to the benefit of Broadcasters, and the continued incentives to route stake towards nodes who can perform additional services reliably and cost effectively to the network in exchange for fees.
+上面的方法的好处和缺点值得考虑,重要的是要注意,结果实现了从实施任何上述将扩大协调器网络,更多的冗余和竞争提供给广播的好处,和持续激励路由股份向节点可以执行额外的服务可靠和成本有效的网络,以换取费用。
 
-One of the benefits of the minimum stake models is that as fees flow through the network, there is little reason to operate a node that isn't competing for work on the network. The number of slots is limited, and that stake is better put to use delegating towards a node that would provide a fee share, than simply sitting on an idle node only collecting rewards. 
+最小利害关系模型的好处之一是，随着费用在网络中流动，几乎没有理由运行一个没有竞争网络工作的节点。插槽的数量是有限的，而且这部分股份最好是委托给一个能够提供费用分成的节点，而不是简单地坐在一个空闲的节点上，只收取报酬。
 
 
 ### Service Registry

@@ -51,80 +51,79 @@ Livepeer协议激励和保护分散的视频编码节点网络。想要对视频
 
 The alpha version of the protocol currently deployed on the Ethereum blockchain has implemented many of the designs originally specified in the [Livepeer Whitepaper](https://github.com/livepeer/wiki/blob/master/WHITEPAPER.md). The delegated stake based system, with its inflationary incentives, has shown to be effective in incentivizing participation, and creating an engaged early network of transcoders and delegators to perform transcoding work and QA accordingly. The network is usable, and for a number of use cases such as long running live transcoding, or decentralized app prototyping, is a viable option today in its early state. However, for the scaled usage of video infrastructure services, the alpha version suffers from the following weaknesses:
 
-1. Cost of using the network is too correlated to fluctuations in Ethereum gas pricing, and therefore at times of high gas prices, or encoding scenarios which require many transactions, the network becomes too expensive to be viable relative to centralized alternatives.
-2. Stake based job assignment and on-chain transcoder negotiation creates unreliable scenarios for the broadcaster - if their assigned transcoder goes offline, they incur additional costs and delays in negotiating for a second transcoder, which can be prohibitively disruptive in a live streaming context.
-3. The data availability problem remains unsolved (in production), and therefore verification of work can not be fully trustless and non-interactive. 
-4. Transcoders have no way of managing their availability to perform or not perform jobs depending upon capacity and workload beyond stake.
-5. While the network encourages price competition, it does not encourage performance competition and accountability directly.
-6. Current limitations of Ethereum gas limits and the protocol’s practical implementation restrict the number of active transcoders who can be active at any one time to a very low number, creating a high barrier to entry to compete for work on the network.
+1. 使用网络的成本与以太坊gas价格的波动关联太大，因此，在gas价格高企时，或者编码需要许多事务的场景时，相对于集中式替代方案，网络变得过于昂贵而不可行。
+2. 基于利害关系的工作分配和链上转码协商为广播公司创建了不可靠的场景——如果分配给他们的转码器离线，他们在协商第二个转码器时会产生额外的成本和延迟，这在实时流媒体环境中可能会造成严重的破坏。
+3. 数据可用性问题仍然没有解决(在生产中)，因此工作的验证不能完全缺乏信任和非交互式。 
+4. 编译器无法管理其执行或不执行任务的可用性，这取决于超出风险的容量和工作负载。
+5. 虽然网络鼓励价格竞争，但它并不直接鼓励业绩竞争和问责制。
+6. 目前Ethereum气体限制的限制和协议的实际实现将可以在任何时间处于活动状态的活动译码器的数量限制在非常低的水平，从而为进入网络竞争工作设置了很高的障碍。
 
-The rest of this paper proposes solutions that address each of these weaknesses in turn. It leads off with a description of the architectural and protocol change proposals. It then analyzes the economic impacts of these changes on the network, before addressing the possible attacks. It moves on to acknowledge the open research areas which can contribute to taking this proposal from economic and social/reputation based security to strongly, cryptographically assured security. And it will finally conclude with some thoughts on a migration path from the alpha protocol to Streamflow in the live network, should the community wish to accept these changes.
+本文的其余部分依次提出了解决这些弱点的解决方案。它首先描述了架构和协议更改建议。然后，在处理可能的攻击之前，分析这些变化对网络的经济影响。它接着承认了开放的研究领域，这些领域有助于将该提案从基于经济和社会/声誉的安全，转变为强大的、加密的安全。最后，如果社区愿意接受这些更改，那么它将对从alpha协议迁移到实时网络中的Streamflow的路径进行一些思考。
 
-This paper describes the conceptual protocol changes and analyzes their impact, but leaves the specific specifications for their implementation to an accompanying SPEC document to be provided as part of the Livepeer Improvement Proposal (LIP) process.
+本文描述了概念协议的更改并分析了它们的影响，但是将实现这些更改的特定规范留给了附带的规范文档，作为Livepeer改进建议(LIP)过程的一部分提供。
 
 _Note: To properly absorb the protocol updates, it's important to have an understanding of how the current Livepeer protocol works, as described in the Whitepaper [[1](#references)]._
 
 
 ## Streamflow协议的建议 #################################
 
-This proposal introduces a number of changes and new concepts into the Livepeer ecosystem. Each delivers impacts across one or many of the areas of affordability, performance, reliability, or scalability. They include:
+该提议向Livepeer生态系统引入了许多变化和新概念。每一个都在可负担性、性能、可靠性或可伸缩性的一个或多个领域产生影响。它们包括:
 
-* Introduction of a new role of Orchestrator, to the existing roles of Broadcasters and Transcoders. 
-* Relaxation on the limitation on number of transcoders, allowing open access to compete for work amongst any aspiring token holding Orchestrator meeting the minimum stake and security requirements.
-* Service registry in which Orchestrators advertise their available capabilities and services on chain.
-* Offchain price negotiation and job assignment between Broadcasters and Orchestrators.
-* Offchain payments using Probabilistic Micropayments, with on chain settlement and security deposits.
-* Updated verification flow, in which on chain verification only needs to occur in the case of an observed fault.
+* 将编配器的新角色引入广播和译码器的现有角色。
+* 放宽对译码器数量的限制，允许开放访问在满足最低利害关系和安全需求的任何有抱负的代币持有协调器之间竞争工作。
+* 服务注册中心，在其中编制器在链上公布其可用功能和服务。
+* 广播公司和管弦乐编曲人员之间的非正式价格谈判和工作分配。
+* 使用概率微支付的离线支付，带有链上结算和安全存款。
+* 更新的验证流程，其中链是那个验证只需要在观察到故障的情况下进行。
 
 ### 协调器和转换器
 
-Currently a Transcoder on the Livepeer network is a protocol-aware node that both watches and interacts with the blockchain protocol and performs video transcoding work. In short, it both orchestrates work on the network, and transcodes video. This can create performance and reliability issues, and make it difficult for nodes to scale their operations. Streamflow proposes a two tiered architecture, which contains a split between:
+目前，Livepeer网络上的转码器是一个协议感知节点，它既监视区块链协议，又与之交互，并执行视频转码工作。简而言之，它既可以在网络上编排工作，也可以对视频进行代码转换。这可能会造成性能和可靠性问题，并使节点难以扩展其操作。Streamflow提出了两层架构，其中包含以下部分:
 
-* An Orchestrator which is protocol aware, negotiates work with Broadcasters, is responsible for delivering verified transcoded segments to the Broadcasters, and coordinates the execution of this work amongst a potentially large pool of transcoders.
-* A Transcoder which is not necessarily aware of the Livepeer staking protocol or blockchain, and instead is just competitive, cost-effective hardware, which does the sole job of racing to transcode video as cheaply and quickly as possible, as coordinated by Orchestrators.
-
+* 协调器是协议感知的，与广播商协商工作，负责向广播商交付经过验证的转码段，并在潜在的大的转码器池中协调这项工作的执行。
+* 一个不需要知道Livepeer staking协议或区块链的转码器，而只是具有竞争力的、成本效益好的硬件，它的唯一工作就是在编配人员的协调下，以尽可能低的成本和尽可能快的速度对视频进行编码。
 <img src="https://livepeer-dev.s3.amazonaws.com/docs/otsplit.jpg" alt="Orchestrator Transcoder Split" style="width:750px">
 
-Tier one of this architecture is similar to the current Livepeer protocol, wherein current Transcoders are renamed to Orchestrators. These Orchestrators stake LPT to provide security deposits against the work that they perform, such that should they harm the network, they incur economic penalty. Broadcasters are aware of these Orchestrators, negotiate jobs with them, and receive transcoded segments back from them, with the ability to slash the Orchestrators if they perform work dishonestly. 
+这个体系结构的第一层类似于当前的Livepeer协议，其中当前的代码转换器被重命名为协调器。这些协调器将LPT作为赌注来提供针对其执行的工作的安全存款，这样，如果它们损害了网络，就会招致经济损失。广播公司知道这些编排器，与它们协商工作，并从它们那里接收转换后的段，如果编排器不诚实地执行工作，广播公司可以删除编排器。
 
 Tier two of this architecture is a new concept called the Transcoder Pool. The job of actually racing to perform video transcoding as quickly and cheaply as possible can be performed by GPUs who have available capacity, such as those described in the Video Miner Proposal[[2](#references)], which have NVENC asics sitting idle. This hardware should just be able to compete to perform the actual encoding work, and the competitive forces and economics should result in significantly cheaper prices than if Orchestrators themselves needed to perform the work on the same CPU based setups required to run blockchain and protocol aware orchestration on the network.
 
 This is analogous to current cryptocurrency mining pools, in which the implementation for the pools themselves can be centralized or decentralized; they can be run by the central pool operator themselves or they can be open to tap into the millions of available computers around the world all competing to mine the next block. An Orchestrator can provide the transcoding for their own pool if they’d like, which results in the same setup as exists in the Livepeer protocol today, though by doing so they have to be expert at two very separate and distinct jobs, and they compete with those Orchestrators who open up their pools to potentially faster or cheaper sources of transcoding. On the other hand, if an orchestrator runs their own pool then they can trust the video encodings without having the verify the work of the public untrusted transcoders.
 
-Some benefits of this two-tiered setup include:
+这种两层结构的一些好处包括:
 
-* Anyone who wants to earn fees can do so simply by turning on their hardware and have it race to perform available transcoding jobs. No on chain knowledge, cryptocurrency, staking, deposits, need necessarily be required. This is much like the way anyone can earn bitcoin by mining as part of a pool. However, while access is open to everyone to compete, transcoders with advantages in electricity, bandwidth, and geolocation will likely outperform those running without these competitive setups.
-* Broadcasters get the pooled security of an Orchestrator’s on chain stake, but the underlying scaling implementations and security of public and private pools can be left up to experimentation outside the scope of the Livepeer protocol.
-* Orchestrators can focus on proper operations for protocol interactions and security, rather than focusing on scaling hardware. One orchestrator could orchestrate hundreds of streams concurrently without having to transcode the video itself.
-* Alternate transcoder pool implementations can be available, leveraging GPUs, distributed setups to race for jobs in different regions, and encouraging competition which will result in cheapest available prices for Broadcasters.
+* 任何想要赚钱的人都可以通过简单地打开他们的硬件，让它竞相执行可用的代码转换工作来实现这一点。不需要链上知识、加密货币、赌注、存款等。这就像任何人都可以通过挖矿来获得比特币一样。然而，尽管每个人都可以访问并参与竞争，但在电力、带宽和地理定位方面具有优势的译码器可能会比那些没有这些竞争性设置的译码器运行得更好。
+* 广播公司获得编配器的池安全性，但是底层的扩展实现和公共和私有池的安全性可以留给Livepeer协议范围之外的试验。
+* 协调器可以专注于协议交互和安全性的正确操作，而不是专注于扩展硬件。一个编配器可以同时编排数百个流，而不需要对视频本身进行代码转换。
+* 可以使用其他的转码器池实现，利用gpu、分布式设置来竞争不同地区的工作，并鼓励竞争，这将为广播公司带来最便宜的可用价格。
 
-While this paper will describe the protocol for Broadcaster/Orchestrator communication and security, it leaves the second tier of Orchestrator/Transcoder protocol to varying implementations. In the simple case where an Orchestrator is its own Transcoder Pool, then the protocol’s security holds, while other trust/performance tradeoffs can be made in alternative implementations for coordinating pools, ranging from centralized and trusted, to decentralized secured by blockchain based stakes and deposit within layer two. It is theorized that since verification of work performed by random actors in a public pool incurs additional cost to an O, then private pools may outperform public pools, however this can potentially be overcome by solid cryptoeconomic deposits, slashing, and verification protocols. 
+虽然本文将描述用于广播/编配通信和安全的协议，但它将编配/转码协议的第二层留给不同的实现。在一个简单的例子中，一个编制器是它自己的转码池，那么协议的安全性就保持了，而其他的信任/性能权衡可以在协调池的替代实现中进行，范围从集中式和受信任的，到由基于区块链的赌注和存储在第二层中的分散安全。理论上，由于在公共池中对随机参与者执行的工作进行验证会给O带来额外的成本，因此私有池的性能可能优于公共池，但是这可以通过可靠的加密经济存储、削减和验证协议来克服。
 
 
-### Relaxation of Transcoder Limit and Stake Enforced Security
+### 放松译码器限制和桩强制安全
 
-The second major change proposed by Streamflow is to relax the artificial limit on number of active Transcoders (Orchestrators in Streamflow). At genesis this parameter was set to 10, and has since expanded to 15, however this still creates a major barrier to entry, in that a node needs increasingly more LPT staked in order to enter the active pool. In Streamflow, the goal is to remove this arbitrary limit and to allow any node who provides enough security in the form of stake (or delegated stake) access to compete on the network.
+Streamflow提出的第二个主要更改是放松对活动Transcoders (Streamflow中的协调器)数量的人为限制。在genesis中，这个参数被设置为10，之后扩展到15，但是这仍然造成了进入的主要障碍，因为节点需要越来越多的LPT来进入活动池。在Streamflow中，目标是消除这个任意限制，并允许以利害关系(或委托利害关系)访问的形式提供足够安全的任何节点在网络上竞争。
 
-The reasons for the limit in the first place were:
+限制的原因首先是:
 
-* With work assigned on chain to active transcoders, it was critical that they be online and available to perform the work. A constraint on the availability of this position, and easy visibility of their statistics and performance helped ensure a high quality network.
-* Ethereum gas limitations on the calculation and bookkeeping around this active set, created an artificial limit, which could still expand beyond the current point but not by an order of magnitude.
-* During the alpha it was important to be in close contact and coordination with the active set so that they could update software frequently, respond to bugs, and help develop and QA the network.
-* Active transcoders needed enough stake at risk to secure the network, such that if they cheated they would receive a steep economic penalty.
+* 将工作链上分配给活动的译码器后，关键是它们必须在线并可用于执行工作。对这个职位的可用性的限制，以及他们的统计数据和性能的容易可见性，有助于确保高质量的网络。
+* 以太坊gas对计算和记账的限制围绕这一活动集，创造了一个人为的限制，它仍然可以扩展到当前点以外，但不是一个数量级。
+* 在alpha测试期间，与活动集保持密切的联系和协调是非常重要的，这样他们就可以频繁地更新软件，响应bug，并帮助开发和QA网络。
+* 活跃的译码员需要有足够的风险来保证网络的安全，这样，如果他们作弊，就会受到严重的经济惩罚。
 
-The effects on the above of the reduction in this artificial limit will be realized by:
+减少这一人为限制的影响将通过以下方式实现:
 
-* Offchain job negotiation and failover, meaning that Orchestrators who aren’t available or don’t perform work will just lose future work, but won’t hurt the Broadcaster experience.
-* The active set won’t have to be calculated per round, and instead can just be maintained in place as Orchestrators bond, unbond, or get slashed.
-* Active, competitive Orchestrators will still want to pay close attention to upgrades, bugs, and the development of the network - but inactive Orchestrators who don’t will simply fail to attract work on the network without hurting the Broadcaster experience.
-* Now that a large percentage of the initial stake is actively participating, the requirements can be set such that enough stake and security is in play to secure a larger number of nodes competing for work on the network.
+* 离线作业协商和故障转移，这意味着无法工作或无法执行工作的编配人员将失去未来的工作，但不会影响广播人员的体验。
+* 活动集不必每轮计算一次，相反，可以作为协调器键、取消键或被删除来维护。
+* 活跃的、有竞争力的编配人员仍然希望密切关注网络的升级、bug和开发——但是不活跃的编配人员将无法在不影响广播体验的情况下吸引网络上的工作。
+* 既然初始利害关系的很大一部分是积极参与的，那么可以设置足够的利害关系和安全性，以保护更多的节点在网络上竞争工作。
 
-The exact number of target Orchestrators and implementation method is still an open research problem. Initially, there should be an order of magnitude increase - such as hundreds of active Orchestrators rather than 15 - with a goal of eventually expanding into the 1000's in order to offer each service in every region in the world with redundancies. Here are a few considered mechanisms, with a short description of some of their tradeoffs:
+目标协调器的确切数量和实现方法仍然是一个有待研究的问题。最初，应该有一个数量级的增长——例如数百个活动协调器，而不是15个——最终的目标是扩展到1000个，以便为世界上每个地区的每个服务提供冗余。以下是一些经过深思熟虑的机制，并简要描述了它们的一些权衡:
 
-1. **Expand N (# of orchestrator slots) from 15 to something much larger, such as 200**: Things would essentially work the way they do today, with a much lower barrier to entry to activating a node. But this would make bonding related actions more expensive. Ethereum scaling and gas issues may come into play.
-2. **Set a minimum required stake to become an Orchestrator**: This would establish a maximum possible `N`, while allowing anyone to know exactly what it takes to achieve that security bar and remain in the active set. It would also enable an expanding network of Orchestrators as inflationary LPT is generated, and encourage Delegators to actively seek out new potential Orchestrators offering fee shares, who are looking to surpass the minimum to become active to compete for work.
-3. **Set a fixed stake amount for any Orchestrator**: This would force Orchestrators to run additional nodes, and Delegators to constantly restake, in order to put their inflatiory LPT to use. But it comes with some weaknesses around the resulting user experience for both Orchestrators and Delegators, as well as some complex implementation details.
-4. **Eliminate any minimum stake requirement from the protocol, and let clients configure how much stake is required to secure a job**: This creates the most open access and is the most decentralized initially, however it offers the least coordination between token holding Delegators and Orchestrators aligning to create a high quality network - essentially reputation plays a larger role, and therefore it could lead to more centralization of the work performed over the longer term as delegators have less collective ability to route work.
+1. **将N(编配槽的#)从15扩展到更大的值，比如200**: 事情基本上会像今天这样工作，激活一个节点的进入壁垒要低得多。但这将使建立联系的相关行动更加昂贵。以太结垢和气体问题可能会发挥作用。
+2. **设置成为协调器所需的最小利害关系**: 这将建立一个最大可能的“N”,同时允许任何人知道如何实现这一安全栏和保持活跃集。它还将启用一个扩大网络协调器的通胀下生成的,并鼓励积极寻找新的潜在的协调器提供费用有股票,谁正在寻找超过最低成为活跃的工作竞争。
+3. **为任何协调器设置固定的利害关系**: 这将迫使编排器运行额外的节点，并使委托器不断地进行重新设置，以便使用它们的膨胀式LPT。但是，它在协调器和委托器的最终用户体验方面存在一些弱点，以及一些复杂的实现细节。
+4. **从协议中消除任何最小利害关系要求，并让客户端配置保护作业所需的利害关系**: This creates the most open access and is the most decentralized initially, however it offers the least coordination between token holding Delegators and Orchestrators aligning to create a high quality network - essentially reputation plays a larger role, and therefore it could lead to more centralization of the work performed over the longer term as delegators have less collective ability to route work.
 
 While the benefits and weaknesses of the above approaches are being considered, it's important to note that the result achieved from implementing any of the above will be an expanded Orchestrator network, more redundancies and competition provided to the benefit of Broadcasters, and the continued incentives to route stake towards nodes who can perform additional services reliably and cost effectively to the network in exchange for fees.
 

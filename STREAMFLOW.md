@@ -13,11 +13,11 @@ Josh Allmann <josh@livepeer.org>
 
 **STATUS: PROPOSAL - Feedback and review is requested on this early proposal.**
 
-## Abstract #####################################
+## 摘要 #####################################
 
 The Streamflow proposal introduces updates to the Livepeer protocol and offchain implementations which will allow Livepeer to scale beyond the current limitations of the alpha protocol deployed to the Ethereum blockchain. It suggests updates that address affordability, reliability, performance, and scalability of the network. Key elements are introduced including a service registry, an offchain job negotiation and payments mechanism, a split between orchestration nodes and transcoding nodes, the elimination of the data availability problem solution as a dependency on trustless verification, and the opening up of the number of nodes that can compete to perform work on the network from the low arbitrary limits during the alpha. The resulting architecture will allow users of the network to perform high scale transcoding jobs on the network across many concurrent work providers, while significantly reducing the impact of the underlying blockchain's demand and price volatility on the economic viability of using the network. 
 
-## Table of Contents ###########################################
+## 目录 ###########################################
 
 * [Introduction and Background](#introduction-and-background)
 * [Streamflow Protocol Proposal](#streamflow-protocol-proposal)
@@ -45,7 +45,7 @@ The Streamflow proposal introduces updates to the Livepeer protocol and offchain
     * [Appendix A: Probabilistic Micropayments Workflow](#appendix-a-probabilistic-micropayments-workflow)
 * [References](#references)
 
-## Introduction and Background ###########################################
+## 介绍和背景 ###########################################
 
 The Livepeer protocol incentivizes and secures a decentralized network of video transcoding nodes. Users who would like to transcode video can submit a job to the network at a price they determine to be acceptable, be assigned a transcoder, have the video transcoding performed with economically secured guarantees of accuracy. The live protocol uses a delegated-stake based mechanism for electing the nodes who are deemed reliable and high quality enough to perform live video encoding in a timely and performant manner. 
 
@@ -65,7 +65,7 @@ This paper describes the conceptual protocol changes and analyzes their impact, 
 _Note: To properly absorb the protocol updates, it's important to have an understanding of how the current Livepeer protocol works, as described in the Whitepaper [[1](#references)]._
 
 
-## Streamflow Protocol Proposal #################################
+## Streamflow协议的建议 #################################
 
 This proposal introduces a number of changes and new concepts into the Livepeer ecosystem. Each delivers impacts across one or many of the areas of affordability, performance, reliability, or scalability. They include:
 
@@ -76,7 +76,7 @@ This proposal introduces a number of changes and new concepts into the Livepeer 
 * Offchain payments using Probabilistic Micropayments, with on chain settlement and security deposits.
 * Updated verification flow, in which on chain verification only needs to occur in the case of an observed fault.
 
-### Orchestrators and Transcoders
+### 协调器和转换器已经
 
 Currently a Transcoder on the Livepeer network is a protocol-aware node that both watches and interacts with the blockchain protocol and performs video transcoding work. In short, it both orchestrates work on the network, and transcodes video. This can create performance and reliability issues, and make it difficult for nodes to scale their operations. Streamflow proposes a two tiered architecture, which contains a split between:
 
@@ -101,7 +101,7 @@ Some benefits of this two-tiered setup include:
 While this paper will describe the protocol for Broadcaster/Orchestrator communication and security, it leaves the second tier of Orchestrator/Transcoder protocol to varying implementations. In the simple case where an Orchestrator is its own Transcoder Pool, then the protocol’s security holds, while other trust/performance tradeoffs can be made in alternative implementations for coordinating pools, ranging from centralized and trusted, to decentralized secured by blockchain based stakes and deposit within layer two. It is theorized that since verification of work performed by random actors in a public pool incurs additional cost to an O, then private pools may outperform public pools, however this can potentially be overcome by solid cryptoeconomic deposits, slashing, and verification protocols. 
 
 
-### Relaxation of Transcoder Limit and Stake Enforced Security
+### 放松译码器限制和桩强制安全
 
 The second major change proposed by Streamflow is to relax the artificial limit on number of active Transcoders (Orchestrators in Streamflow). At genesis this parameter was set to 10, and has since expanded to 15, however this still creates a major barrier to entry, in that a node needs increasingly more LPT staked in order to enter the active pool. In Streamflow, the goal is to remove this arbitrary limit and to allow any node who provides enough security in the form of stake (or delegated stake) access to compete on the network.
 
@@ -131,14 +131,14 @@ While the benefits and weaknesses of the above approaches are being considered, 
 One of the benefits of the minimum stake models is that as fees flow through the network, there is little reason to operate a node that isn't competing for work on the network. The number of slots is limited, and that stake is better put to use delegating towards a node that would provide a fee share, than simply sitting on an idle node only collecting rewards. 
 
 
-### Service Registry
+### 服务注册中心
 
 Streamflow expands the role of the Service Registry in the on chain protocol. Orchestrators will continue to advertise their `rewardCut`, `feeShare`, and connection information, however they will also advertise the services that their node is offering, and region(s) their node is serving. This will lead to performance impacts and Broadcasters can look for the specific services they want, served by a nearby node. Orchestrators will no longer advertise the price that they are charging, as price and availability negotiation is moving off chain. As for considered services, there are likely two abstractions:
 
-1. **Service**
+1. **服务**
     1. Service identifier - the id that represents this particular service, such as “CPUTranscoding”, “GPUTranscoding”, or “SegmentVerification". There is still work to be done on the exact definition here, and it’s possible the services are more granular such as input/output encoding pairs such as “H264 1080p -> 720p”. 
     1. Verification function - the address pointer to the verification function which will be run to invoke on chain verification of the correctness of this service (can be null if there is no verification available). 
-1. **Locations**
+1. **位置**
     1. Implementation is TBD, but this is likely an abstraction that specifies an array of the regions that this node is willing or able to serve. 
 
 The combination of advertising these will allow Broadcasters to filter the Service Registry for nodes whom are advertising the services and locations that they would like to serve in order to be efficient in beginning an offchain negotiation with the proper service providers. Location was a previously ignored factor in the alpha version of Livepeer, however it can be critical for live video ingest that the nodes receiving the video are located in close proximity to the video source, due to various networking issues that can occur and create instability over longer connections with more hops.
@@ -147,7 +147,7 @@ An advertised location can of course be falsified, however, like many aspects of
 
 As nodes earn inflationary LPT, in order to put it to optimized use, the most effective thing they can do is add a new node to the service registry which serves a capability or location for which there is demand, but not enough reliable or cost effective supply - therefore expanding the footprint of the network and ability to serve various customers and use cases. 
 
-### Offchain Job Negotiation
+### Offchain谈判工作
 The shift from on chain job assignment to off chain job negotiation is perhaps the biggest change proposed by Streamflow. It changes the assumption that jobs are routed strictly according to stake, and this will be analyzed below in the analysis section, but it also comes with tremendous benefits. Namely:
 
 * **Availability** - Broadcasters will be able to ensure that Orchestrators are available to do work before contracting with them.
@@ -178,7 +178,7 @@ Switching and adding redundancy does not introduce any on chain transaction cost
 Note that steps 1-4 can optionally be performed in the background on an ongoing basis, rather than at stream inception. If a Broadcaster is handling many concurrent streams, they may find it worth it to keep an up to date price/service table for all available Orchestrators, such that they can just begin working with one at any moment on any stream.
 
 
-### Probabilistic Micropayments
+### 概率小额支付
 The largest impact on cost savings from Streamflow will come from this Probabilistic Micropayments (PM) proposal. Formerly, the protocol used a deposit() -> job() -> claim() -> verify() -> distributeFees() transaction flow to release payments for performed work. The last three of these transactions needed to be performed for every 1000 segments of video on average (or more), and doing five transactions for a short job would be completely cost prohibitive for Transcoders.
 
 For background on PM, it is suggested to review a post from the Orchid Protocol team on its use in a decentralized VPN network, as well as the previous academic research[[3, 4, 5](#references)]. The summary is that the Broadcaster issues signed tickets along with every single segment of work to the Orchestrator. The ticket has a high face value if it “wins”, allowing the Orchestrator to cash it in on chain for that high amount. However, the probability of it winning is very low, so the expected value of each ticket is the price/segment that the Broadcaster and Orchestrator agree upon. Over the long term, Broadcasters will pay nearly exactly what they agree per segment to Orchestrators, and Orchestrators will be paid nearly exactly the correct amount for the work they performed, due to the probabilities at work.
@@ -191,7 +191,7 @@ Due to the offchain job negotiation and potential redundancies a Broadcaster may
 
 The full PM workflow is left for [an appendix](#appendix), since it touches on verification, off chain negotiation and many other areas such as double spend risk and mitigation.
 
-### Fault-based On Chain Verification
+### 基于故障的链验证
 The final major change proposed by Streamflow is to adjust the verification protocol in order to reduce costs and avoid the data availability problem. Previously, transcoders were required to invoke Truebit verification for 1 out of every `VerificationRate` segments, which was set to 1 out of 1000 segments originally. This is very expensive, and is required whether the Transcoder did the work correctly or incorrectly. The new proposal is that:
 
 * Broadcasters are responsible to verify received transcoded segments, and only challenge them to Truebit on chain if they believe that the segment failed verification.

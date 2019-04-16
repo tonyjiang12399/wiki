@@ -49,7 +49,7 @@ Livepeer项目旨在提供完全去中心化，高度可扩展，和加密代币
     * [Livepeer协议事务类型](#livepeer-protocol-transaction-types)
 * [参考](#references)
 
-*注意：本文最初发布于2017年4月.2018年12月提出了一个称为“Streamflow”的扩展提案，其中概述了下面提出的一些想法的一些迭代和增强。 阅读[Streamflow Proposal here](https://github.com/livepeer/wiki/blob/master/STREAMFLOW.md).* 
+*注意：本文最初发布于2017年4月.2018年12月提出了一个称为“Streamflow”的扩展提案，该建议概述了以下一些想法的一些迭代和增强。。 在这里阅读[Streamflow Proposal](https://github.com/livepeer/wiki/blob/master/STREAMFLOW.md).* 
 
 ## 介绍和背景 ###########################################
 

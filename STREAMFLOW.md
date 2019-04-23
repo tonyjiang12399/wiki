@@ -25,7 +25,7 @@ Streamflow提议引入了对Livepeer协议和离线实现的更新，这将允�
     * [放松译码器限制和股权强制执行安全](#relaxation-of-transcoder-limit-and-stake-enforced-security)
     * [服务注册中心](#service-registry)
     * [Offchain谈判工作](#offchain-job-negotiation)
-    * [概率小额支付(#probabilistic-micropayments)
+    * [概率小额支付](#probabilistic-micropayments)
     * [基于故障的链验证](#fault-based-on-chain-verification)
 * [经济分析](#economic-analysis)
     * [Livepeer代币](#livepeer-token)

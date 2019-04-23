@@ -1,12 +1,12 @@
 # Livepeer Streamflow白皮书
 
-**Livepeer Scalability on Ethereum through Orchestration, Probabilistic Micropayments, and Offchain Job Negotiation**
+**在Ethereum上通过编排、概率微支付和离线作业协商实现Livepeer可伸缩性**
 
-**Authors**    
+**作者**    
 Doug Petkanics <doug@livepeer.org>    
 Yondon Fu <yondon@livepeer.org>
 
-**Researchers**    
+**研究人员**    
 Eric Tang <eric@livepeer.org>    
 Philipp Angele <philipp@livepeer.org>    
 Josh Allmann <josh@livepeer.org>
@@ -15,25 +15,25 @@ Josh Allmann <josh@livepeer.org>
 
 ## 摘要 #####################################
 
-The Streamflow proposal introduces updates to the Livepeer protocol and offchain implementations which will allow Livepeer to scale beyond the current limitations of the alpha protocol deployed to the Ethereum blockchain. It suggests updates that address affordability, reliability, performance, and scalability of the network. Key elements are introduced including a service registry, an offchain job negotiation and payments mechanism, a split between orchestration nodes and transcoding nodes, the elimination of the data availability problem solution as a dependency on trustless verification, and the opening up of the number of nodes that can compete to perform work on the network from the low arbitrary limits during the alpha. The resulting architecture will allow users of the network to perform high scale transcoding jobs on the network across many concurrent work providers, while significantly reducing the impact of the underlying blockchain's demand and price volatility on the economic viability of using the network. 
+Streamflow提议引入了对Livepeer协议和离线实现的更新，这将允许Livepeer扩展到超出部署到Ethereum区块链的alpha协议的当前限制。它建议对网络的可负担性、可靠性、性能和可伸缩性进行更新。介绍了关键要素包括服务注册中心,一个offchain工作谈判和支付机制,编制节点之间的分裂和代码转换节点,消除数据可用性问题的解决方案作为一个依赖不可靠的验证,和开放的节点数量,可以执行工作竞争低的网络上的任意限制在α。由此产生的体系结构将允许网络用户跨许多并发工作提供者在网络上执行大规模的代码转换工作，同时显著降低底层区块链的需求和价格波动对使用网络的经济可行性的影响。
 
 ## 目录 ###########################################
 
-* [Introduction and Background](#introduction-and-background)
-* [Streamflow Protocol Proposal](#streamflow-protocol-proposal)
-    * [Orchestrators and Transcoders](#orchestrators-and-transcoders)
-    * [Relaxation of Transcoder Limit and Stake Enforced Security](#relaxation-of-transcoder-limit-and-stake-enforced-security)
-    * [Service Registry](#service-registry)
-    * [Offchain Job Negotiation](#offchain-job-negotiation)
-    * [Probabilistic Micropayments](#probabilistic-micropayments)
-    * [Fault-based On Chain Verification](#fault-based-on-chain-verification)
-* [Economic Analysis](#economic-analysis)
-    * [Livepeer Token](#livepeer-token)
-    * [Delegation as Security and Reputation Signal](#delegation-as-security-and-reputational-signal)
-    * [Inflation Into Bonded State and Apathetic Delegators](#infaltion-into-bonded-state-and-apathetic-delegators)
-    * [Offchain Engineering Considerations](#offchain-engineering-considerations)
-* [Attacks](#attacks)
-    * [Delegator Squeezing](#delegator-squeezing)
+* [介绍和背景](#introduction-and-background)
+* [Streamflow协议建议](#streamflow-protocol-proposal)
+    * [协调器和转换器](#orchestrators-and-transcoders)
+    * [放松译码器限制和股权强制执行安全](#relaxation-of-transcoder-limit-and-stake-enforced-security)
+    * [服务注册中心](#service-registry)
+    * [Offchain谈判工作](#offchain-job-negotiation)
+    * [概率小额支付(#probabilistic-micropayments)
+    * [基于故障的链验证](#fault-based-on-chain-verification)
+* [经济分析](#economic-analysis)
+    * [Livepeer代币](#livepeer-token)
+    * [授权作为安全和信誉的信号](#delegation-as-security-and-reputational-signal)
+    * [通货膨胀变成了束缚和冷漠的代表](#infaltion-into-bonded-state-and-apathetic-delegators)
+    * [Offchain工程注意事项](#offchain-engineering-considerations)
+* [攻击](#attacks)
+    * [全权代表挤压](#delegator-squeezing)
     * [Delegator Fee Theft](#delegator-fee-theft)
 * [Open Research Areas](#open-research-areas)
     * [Non Deterministic Verification](#non-deterministic-verification)
@@ -47,38 +47,38 @@ The Streamflow proposal introduces updates to the Livepeer protocol and offchain
 
 ## 介绍和背景 ###########################################
 
-The Livepeer protocol incentivizes and secures a decentralized network of video transcoding nodes. Users who would like to transcode video can submit a job to the network at a price they determine to be acceptable, be assigned a transcoder, have the video transcoding performed with economically secured guarantees of accuracy. The live protocol uses a delegated-stake based mechanism for electing the nodes who are deemed reliable and high quality enough to perform live video encoding in a timely and performant manner. 
+Livepeer协议激励和保护分散的视频编码节点网络。想要对视频进行代码转换的用户可以向网络提交一份工作，其价格是他们认为可以接受的，可以指定一个代码转换人员，可以在保证准确性的前提下执行视频代码转换。live协议使用基于委托利害关系的机制来选择那些被认为足够可靠和高质量的节点，以便及时和高性能地执行live视频编码。
 
 The alpha version of the protocol currently deployed on the Ethereum blockchain has implemented many of the designs originally specified in the [Livepeer Whitepaper](https://github.com/livepeer/wiki/blob/master/WHITEPAPER.md). The delegated stake based system, with its inflationary incentives, has shown to be effective in incentivizing participation, and creating an engaged early network of transcoders and delegators to perform transcoding work and QA accordingly. The network is usable, and for a number of use cases such as long running live transcoding, or decentralized app prototyping, is a viable option today in its early state. However, for the scaled usage of video infrastructure services, the alpha version suffers from the following weaknesses:
 
-1. Cost of using the network is too correlated to fluctuations in Ethereum gas pricing, and therefore at times of high gas prices, or encoding scenarios which require many transactions, the network becomes too expensive to be viable relative to centralized alternatives.
-1. Stake based job assignment and on-chain transcoder negotiation creates unreliable scenarios for the broadcaster - if their assigned transcoder goes offline, they incur additional costs and delays in negotiating for a second transcoder, which can be prohibitively disruptive in a live streaming context.
-1. The data availability problem remains unsolved (in production), and therefore verification of work can not be fully trustless and non-interactive. 
-1. Transcoders have no way of managing their availability to perform or not perform jobs depending upon capacity and workload beyond stake.
-1. While the network encourages price competition, it does not encourage performance competition and accountability directly.
-1. Current limitations of Ethereum gas limits and the protocol’s practical implementation restrict the number of active transcoders who can be active at any one time to a very low number, creating a high barrier to entry to compete for work on the network.
+1. 使用网络的成本与以太坊gas价格的波动关联太大，因此，在gas价格太高时，或者编码需要许多事务的场景时，相对于集中式替代方案，网络变得过于昂贵而不可行。
+2. 基于利害关系的工作分配和链上转码协商为广播公司创建了不可靠的场景——如果分配给他们的转码器离线，他们在协商第二个转码器时会产生额外的成本和延迟，这在实时流媒体环境中可能会造成严重的破坏。
+3. 数据可用性问题仍然没有解决(在生产中)，因此工作的验证不能完全缺乏信任和非交互式。
+4. 编译器无法管理其执行或不执行任务的可用性，这取决于超出风险的容量和工作负载。
+5. 虽然网络鼓励价格竞争，但它并不直接鼓励业绩竞争和问责制。
+6. 目前由于以太坊gas限制和协议的实际实现将可以在任何时间处于活动状态的活动译码器的数量限制在非常低的水平，从而为进入网络竞争工作设置了很高的障碍。
 
-The rest of this paper proposes solutions that address each of these weaknesses in turn. It leads off with a description of the architectural and protocol change proposals. It then analyzes the economic impacts of these changes on the network, before addressing the possible attacks. It moves on to acknowledge the open research areas which can contribute to taking this proposal from economic and social/reputation based security to strongly, cryptographically assured security. And it will finally conclude with some thoughts on a migration path from the alpha protocol to Streamflow in the live network, should the community wish to accept these changes.
+本文的其余部分依次提出了解决这些弱点的解决方案。它首先描述了架构和协议更改建议。然后，在处理可能的攻击之前，分析这些变化对网络的经济影响。它接着承认了开放的研究领域，这些领域有助于将该提案从基于经济和社会/声誉的安全，转变为强大的、加密的安全。最后，如果社区愿意接受这些更改，那么它将对从alpha协议迁移到实时网络中的Streamflow的路径进行一些思考。
 
-This paper describes the conceptual protocol changes and analyzes their impact, but leaves the specific specifications for their implementation to an accompanying SPEC document to be provided as part of the Livepeer Improvement Proposal (LIP) process.
+本文描述了概念协议的更改并分析了它们的影响，但是将实现这些更改的特定规范留给了附带的规范文档，作为Livepeer改进建议(LIP)过程的一部分提供。
 
-_Note: To properly absorb the protocol updates, it's important to have an understanding of how the current Livepeer protocol works, as described in the Whitepaper [[1](#references)]._
+_Note:要正确地吸收协议更新，重要的是理解当前Livepeer协议是如何工作的，如白皮书所述[[1](#references)]._
 
 
 ## Streamflow协议的建议 #################################
 
-This proposal introduces a number of changes and new concepts into the Livepeer ecosystem. Each delivers impacts across one or many of the areas of affordability, performance, reliability, or scalability. They include:
+该提议向Livepeer生态系统引入了许多变化和新概念。每一个都在可负担性、性能、可靠性或可伸缩性的一个或多个领域产生影响。它们包括:
 
-* Introduction of a new role of Orchestrator, to the existing roles of Broadcasters and Transcoders. 
-* Relaxation on the limitation on number of transcoders, allowing open access to compete for work amongst any aspiring token holding Orchestrator meeting the minimum stake and security requirements.
-* Service registry in which Orchestrators advertise their available capabilities and services on chain.
-* Offchain price negotiation and job assignment between Broadcasters and Orchestrators.
-* Offchain payments using Probabilistic Micropayments, with on chain settlement and security deposits.
-* Updated verification flow, in which on chain verification only needs to occur in the case of an observed fault.
+* 将编配员的新角色引入广播员及译码员的现有角色。
+* 放宽对译码器数量的限制，让开放存取系统在任何有抱负的令牌持有编配器之间竞争工作，以满足最低的利害关系和安全要求。
+* 服务注册表，编配者在其中公布他们的可用功能和服务。
+* 广播公司与管弦乐编曲人员之间的场外价格谈判及工作分配。
+* 使用概率微支付的离线支付，带有链上结算和保证金。
+* 更新的验证流程，其中链上验证只需要在观察到故障的情况下进行。
 
 ### 协调器和转换器已经
 
-Currently a Transcoder on the Livepeer network is a protocol-aware node that both watches and interacts with the blockchain protocol and performs video transcoding work. In short, it both orchestrates work on the network, and transcodes video. This can create performance and reliability issues, and make it difficult for nodes to scale their operations. Streamflow proposes a two tiered architecture, which contains a split between:
+目前，Livepeer网络上的转码器是一个协议感知节点，它既监视区块链协议，又与之交互，并执行视频转码工作。简而言之，它既可以在网络上编排工作，也可以对视频进行代码转换。这可能会造成性能和可靠性问题，并使节点难以扩展其操作。Streamflow提出了两层架构，其中包含以下部分:
 
 * An Orchestrator which is protocol aware, negotiates work with Broadcasters, is responsible for delivering verified transcoded segments to the Broadcasters, and coordinates the execution of this work amongst a potentially large pool of transcoders.
 * A Transcoder which is not necessarily aware of the Livepeer staking protocol or blockchain, and instead is just competitive, cost-effective hardware, which does the sole job of racing to transcode video as cheaply and quickly as possible, as coordinated by Orchestrators.

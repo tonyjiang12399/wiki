@@ -325,44 +325,44 @@ The Streamflow proposal is early on in its research, design, feedback, and imple
 * It is anticipated this could be accomplished with little-to-no downtime to the protocol.
 * 3rd party clients such as protocol explorers and analytics tools would likely need updates in order to reflect the new protocol interactions.
 
-A formal migration path, checklist, and multiple observed testnet runs will be made available over time as the candidate Streamflow release date nears.
+随着候选流发布日期的临近，随着时间的推移，正式的迁移路径、检查表和多个观察到的testnet运行将变得可用。
 
-## Summary #################################
+## 总结 #################################
 
-In conclusion, the proposals contained within this document aim to shine a light on a scalable path for Livepeer's video infrastructure network - one that decouples the cost of using the Ethereum blockchain from the cost of using the network itself, and that provides existing scaled video developers with the reliability and performance that they require from their infrastructure.
+总之,本文档中包含的建议旨在揭露Livepeer视频的道路上一个可伸缩的基础设施网络——一个将使用成本Ethereum区块链从使用网络本身的成本,并提供现有扩展视频开发者的可靠性和性能,他们需要从基础设施。
 
-All feedback, ideas, and input are welcomed, so please do not hesitate to drop into [The Livepeer Forum](https://forum.livepeer.org) or [Discord Chat](https://discord.gg/RR4kFAh) to participate.
+欢迎所有的反馈、想法和意见，所以请不要犹豫来 [Livepeer论坛](https://forum.livepeer.org)讨论 或参与 [Discord聊天](https://discord.gg/RR4kFAh) 。
 
 
-## Appendix ################################
+## 附录 ################################
 
-### Appendix A: Probabilistic Micropayments Workflow
+### 附录 A: 概率小额支付流程
 
-* An orchestrators security deposit is their stake. This can get slashed if they cheat and fail a verification.
-* A broadcaster (using this term for general user, which may be more of a developer than broadcaster) places a time-locked deposit to cover the future work that they’ll pay for on the network.
-* A broadcaster wants video transcoded. They look at the on chain registry of orchestrators advertising their services, and negotiate off chain with the ones that fit their needs:
-    * Orchestrators provide them a price quote.
-    * Orchestrators provide probabilistic micropayment (PM) parameters - these can vary depending on Ethereum network conditions. For example they can set the winning ticket amount such that the cost of cashing in is less than 1% of the value received.
-* Broadcaster sends segments of video to the orchestrator(s) they want to work with along with PM ticket.
-    * PM ticket is an interactive protocol in order to prevent either party from biasing the source of randomness used to determine whether a ticket wins or not - after every winning ticket, the orchestrator needs to generate a new random # and send the commitment to the broadcaster. This is probably ok since the broadcaster and orchestrator will already be sending data back and forth already - this would just entail an additional message sent by the orchestrator every time a new commitment is required. A later optimization that might be possible is the use of a verifiable random function (VRF) implemented in a smart contract - the orchestrator would give the broadcaster a pub key and the orchestrator signs received tickets with the corresponding priv key - the VRF contract would verify that the sig is correct which is then used as the source of pseudorandomness. As a result, the protocol becomes non-interactive. Would need to evaluate feasibility of implementing the VRF in a smart contract and the cost of verifying that type of sig - ok not to focus on this right now, but a possibility for the future.
-* Broadcaster receives transcoded output back from orchestrator.
-    * Broadcaster can verify any segments it wants to check.
-    * If the work doesn’t verify, they can provide this proof to Truebit on chain to slash the orchestrator, and earn massive reward.
-* If broadcaster doesn’t receive work back from orchestrator, simply stop sending them future segments and work with different orchestrator.
-* If the orchestrator doesn’t receive a valid PM ticket, just don’t do the work and don’t send any output back.
-    * The protocol will contain messages for certain error conditions, such as `LowPMBalance` or `SegmentFormatDidntMatchJobInputParams` so that the broadcasters can receive some useful information to debug, or so that their node can make decisions like refilling their balance.
-* Orchestrator monitors broadcaster’s deposit and assesses risk of default.
-    * Simple algorithm to begin with. If their balance is too low, just stop doing work.
-    * Orchestrator cashes winning tickets as they’re received (or waits until gas is cheaper, assessing risk of default).
+* 协调者的保证金是他们的赌注。如果他们作弊并没有通过验证，那么这个值就会被削减。
+* 广播公司(使用这个术语来表示普通用户，他们可能更多的是开发人员而不是广播公司)支付一笔有时限的定金，以覆盖他们将在网络上支付的未来工作。
+* 广播公司想要视频转码。他们查看为其服务做广告的编配人员的链上注册表，并与符合其需求的编配人员进行链外谈判:
+    * 协调器为它们提供一个报价。
+    * 协调器提供了概率微支付(PM)参数——这些参数可以根据以太网络条件而变化。例如，他们可以设置中奖金额，使兑现的成本低于收到的价值的1%。
+* 广播公司将视频片段连同PM ticket一起发送给他们想要合作的编曲人员。
+    * PM ticket是一种交互式协议，目的是防止任何一方歪曲用于确定某个ticket是否获胜的随机性源——在每个获胜ticket之后，编配人员需要生成一个新的random #并将承诺发送给广播机构。这可能没有问题，因为广播公司和编配人员已经在来回发送数据了——这只需要编配人员在每次需要新的承诺时发送一条额外的消息。后面的优化,可能是使用一个可核查的随机函数(多联机)中实现智能合同,协调器将广播一个酒吧密钥和协调器收到票,相应的迹象priv关键——多联机的合同将验证签名是正确的然后作为伪随机数的来源。因此，协议变得非交互式。需要评估在智能合同中实现VRF的可行性，以及验证这种类型的sig的成本——好吧，现在不关注这个，但未来的可能性。
+* 广播器从编配器接收转换后的输出。
+    * 广播公司可以验证它想要检查的任何片段。
+    * 如果工作没有得到验证，他们可以提供这个证明给Truebit on chain来削减编制器，并获得巨大的回报。
+* 如果广播公司没有从编配器接收回工作，只需停止向它们发送将来的片段，并使用不同的编配器工作即可。
+* 如果协调器没有收到有效的PM票据，那么就不要执行工作，也不要返回任何输出。
+    * 协议将包含针对某些错误条件的消息，比如`LowPMBalance`或`SegmentFormatDidntMatchJobInputParams`，以便广播器可以接收一些有用的信息进行调试，或者让它们的节点可以做出诸如重新填充余额之类的决策。
+* 协调器监控广播公司的存款并评估违约风险。.
+    * 首先是简单的算法。如果他们的平衡太低，就停止工作。
+    * 协调器在收到中奖彩票时兑现(或者等到gas更便宜时，评估违约风险)。
     
-For a full analysis and specification of the ticket data structures, double spend prevention, and other design considerations, see this [external document](https://hackmd.io/uHMFeNSyS_GyzwnO3Ld74A?view).
+有关票证数据结构的全面分析和规范、防止双重开支以及其他设计考虑事项，请参阅本文[外部文档](https://hackmd.io/uHMFeNSyS_GyzwnO3Ld74A?view).
 
-## References ###########################################
+## 参考文献 ###########################################
 
-1. Livepeer Whitepaper - Doug Petkanics, Eric Tang - <https://github.com/livepeer/wiki/blob/master/WHITEPAPER.md>
-2. The Video Miner, A Path To Scaling Video Transcoding -Philipp Angele  - <https://medium.com/livepeer-blog/the-video-miner-a-path-to-scaling-video-transcoding-a3487d232a1>
-3. Ethereum Probabilistic Micropayments - Gustav Simonson - <https://medium.com/@gustav.simonsson/ethereum-probabilistic-micropayments-ae6e6cd85a06>
-4. Electronic Lottery Tickets as Micropayments - Ron Rivest - MIT Lab for Computer Science - <https://people.csail.mit.edu/rivest/pubs/Riv97b.pdf>
-5. Decentralized Anonymous Micropayments - A. Chiesa, M. Green, J. Liu, P. Miao, I. Miers and P. Mishra - <https://eprint.iacr.org/2016/1033.pdf>
+1. Livepeer白皮书 - Doug Petkanics, Eric Tang - <https://github.com/livepeer/wiki/blob/master/WHITEPAPER.md>
+2. 视频的矿工, A Path To Scaling Video Transcoding -Philipp Angele  - <https://medium.com/livepeer-blog/the-video-miner-a-path-to-scaling-video-transcoding-a3487d232a1>
+3. Ethereum概率小额支付 - Gustav Simonson - <https://medium.com/@gustav.simonsson/ethereum-probabilistic-micropayments-ae6e6cd85a06>
+4. 电子彩票作为小额支付 - Ron Rivest - MIT Lab for Computer Science - <https://people.csail.mit.edu/rivest/pubs/Riv97b.pdf>
+5. 分散的匿名小额支付 - A. Chiesa, M. Green, J. Liu, P. Miao, I. Miers and P. Mishra - <https://eprint.iacr.org/2016/1033.pdf>
 
 

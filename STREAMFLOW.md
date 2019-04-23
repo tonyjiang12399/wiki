@@ -1,4 +1,4 @@
-# Livepeer Streamflow Paper
+# Livepeer Streamflow白皮书
 
 **Livepeer Scalability on Ethereum through Orchestration, Probabilistic Micropayments, and Offchain Job Negotiation**
 

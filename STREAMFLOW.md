@@ -49,7 +49,7 @@ Streamflow提议引入了对Livepeer协议和离线实现的更新，这将允�
 
 Livepeer协议激励和保护分散的视频编码节点网络。想要对视频进行代码转换的用户可以向网络提交一份工作，其价格是他们认为可以接受的，可以指定一个代码转换人员，可以在保证准确性的前提下执行视频代码转换。live协议使用基于委托利害关系的机制来选择那些被认为足够可靠和高质量的节点，以便及时和高性能地执行live视频编码。
 
-The alpha version of the protocol currently deployed on the Ethereum blockchain has implemented many of the designs originally specified in the [Livepeer Whitepaper](https://github.com/livepeer/wiki/blob/master/WHITEPAPER.md). The delegated stake based system, with its inflationary incentives, has shown to be effective in incentivizing participation, and creating an engaged early network of transcoders and delegators to perform transcoding work and QA accordingly. The network is usable, and for a number of use cases such as long running live transcoding, or decentralized app prototyping, is a viable option today in its early state. However, for the scaled usage of video infrastructure services, the alpha version suffers from the following weaknesses:
+目前部署在Ethereum区块链上的协议的alpha版本实现了[Livepeer白皮书]中最初指定的许多设计(https://github.com/livepeer/wiki/blob/master/WHITEPAPER.md)。基于委托利益的系统及其通货膨胀的激励措施已证明在鼓励参与方面是有效的，并已建立了一个由转码人员和委托人员组成的积极参与的早期网络，以执行相应的转码工作和质量保证。该网络是可用的，对于许多用例，例如长时间运行的实时代码转换，或分散的应用程序原型，在其早期阶段是一个可行的选择。但是，由于视频基础设施服务的规模化使用，alpha版存在以下不足:
 
 1. 使用网络的成本与以太坊gas价格的波动关联太大，因此，在gas价格太高时，或者编码需要许多事务的场景时，相对于集中式替代方案，网络变得过于昂贵而不可行。
 2. 基于利害关系的工作分配和链上转码协商为广播公司创建了不可靠的场景——如果分配给他们的转码器离线，他们在协商第二个转码器时会产生额外的成本和延迟，这在实时流媒体环境中可能会造成严重的破坏。
@@ -72,7 +72,7 @@ _Note:要正确地吸收协议更新，重要的是理解当前Livepeer协议是
 * 将编配员的新角色引入广播员及译码员的现有角色。
 * 放宽对译码器数量的限制，让开放存取系统在任何有抱负的代币持有编配器之间竞争工作，以满足最低的利害关系和安全要求。
 * 服务注册表，编配者在其中公布他们的可用功能和服务。
-* 广播公司与管弦乐编曲人员之间的场外价格谈判及工作分配。
+* 广播公司与协调器之间的场外价格谈判及工作分配。
 * 使用概率微支付的离线支付，带有链上结算和保证金。
 * 更新的验证流程，其中链上验证只需要在观察到故障的情况下进行。
 
@@ -121,19 +121,19 @@ Streamflow提出的第二个主要更改是放松对活动Transcoders (Streamflo
 
 目标协调器的确切数量和实现方法仍然是一个有待研究的问题。最初，应该有一个数量级的增长——例如数百个活动协调器，而不是15个——最终的目标是扩展到1000个，以便为世界上每个地区的每个服务提供冗余。以下是一些经过深思熟虑的机制，并简要描述了它们的一些权衡:
 
-1. **Expand N (# of orchestrator slots) from 15 to something much larger, such as 200**: Things would essentially work the way they do today, with a much lower barrier to entry to activating a node. But this would make bonding related actions more expensive. Ethereum scaling and gas issues may come into play.
-2. **Set a minimum required stake to become an Orchestrator**: This would establish a maximum possible `N`, while allowing anyone to know exactly what it takes to achieve that security bar and remain in the active set. It would also enable an expanding network of Orchestrators as inflationary LPT is generated, and encourage Delegators to actively seek out new potential Orchestrators offering fee shares, who are looking to surpass the minimum to become active to compete for work.
-3. **Set a fixed stake amount for any Orchestrator**: This would force Orchestrators to run additional nodes, and Delegators to constantly restake, in order to put their inflatiory LPT to use. But it comes with some weaknesses around the resulting user experience for both Orchestrators and Delegators, as well as some complex implementation details.
-4. **Eliminate any minimum stake requirement from the protocol, and let clients configure how much stake is required to secure a job**: This creates the most open access and is the most decentralized initially, however it offers the least coordination between token holding Delegators and Orchestrators aligning to create a high quality network - essentially reputation plays a larger role, and therefore it could lead to more centralization of the work performed over the longer term as delegators have less collective ability to route work.
+1. **将N(编配槽的#)从15扩展到更大的值，比如200**: 事情基本上会像今天这样工作，激活一个节点的进入壁垒要低得多。但这将使建立联系的相关行动更加昂贵。以太结垢和气体问题可能会发挥作用。
+2. **设置成为协调器所需的最小利害关系**: 这将建立一个最大可能的“N”,同时允许任何人知道如何实现这一安全栏和保持活跃集。它还将启用一个扩大网络协调器的通胀下生成的,并鼓励积极寻找新的潜在的协调器提供费用有股票,谁正在寻找超过最低成为活跃的工作竞争。
+3. **为任何协调器设置固定的利害关系**: 这将迫使编排器运行额外的节点，并使委托器不断地进行重新设置，以便使用它们的膨胀式LPT。但是，它在协调器和委托器的最终用户体验方面存在一些弱点，以及一些复杂的实现细节。
+4. **从协议中消除任何最小利害关系要求，并让客户端配置保护作业所需的利害关系**: 这将创建最开放、最分散的最初,但是它提供了至少令牌持有有之间的协调和协调器将创建一个高质量的网络——本质上名声扮演更重要的角色,因此它可能导致更多的集中的长期工作中有更少的集体能力有路由的工作。
 
-While the benefits and weaknesses of the above approaches are being considered, it's important to note that the result achieved from implementing any of the above will be an expanded Orchestrator network, more redundancies and competition provided to the benefit of Broadcasters, and the continued incentives to route stake towards nodes who can perform additional services reliably and cost effectively to the network in exchange for fees.
+的好处和缺点上面的方法正在考虑中,重要的是要注意,结果实现了从实施任何上述将扩大协调器网络,更多的冗余和竞争提供给广播的好处,和持续激励路由股份向节点可以执行额外的服务可靠和成本有效的网络,以换取费用。
 
 最小利害关系模型的好处之一是，随着费用在网络中流动，几乎没有理由运行一个没有竞争网络工作的节点。插槽的数量是有限的，而且这部分股份最好是委托给一个能够提供费用分成的节点，而不是简单地坐在一个空闲的节点上，只收取报酬。
 
 
 ### 服务注册中心
 
-Streamflow expands the role of the Service Registry in the on chain protocol. Orchestrators will continue to advertise their `rewardCut`, `feeShare`, and connection information, however they will also advertise the services that their node is offering, and region(s) their node is serving. This will lead to performance impacts and Broadcasters can look for the specific services they want, served by a nearby node. Orchestrators will no longer advertise the price that they are charging, as price and availability negotiation is moving off chain. As for considered services, there are likely two abstractions:
+Streamflow扩展了服务注册中心在on chain协议中的角色。协调器将继续宣传他们的`rewardCut`, `feeShare`,和连接信息，但是他们也将宣传他们的节点正在提供的服务，以及他们的节点正在服务的区域。这将导致性能影响，广播公司可以查找他们想要的特定服务，由附近的节点提供。由于价格和可用性协商正在脱离链，协调器将不再宣传他们正在收取的价格。对于经过考虑的服务，可能有两个抽象概念:
 
 1. **服务**
     1. 服务标识符——表示此特定服务的id，如“CPUTranscoding”、“GPUTranscoding”或“SegmentVerification”。在准确的定义上还有很多工作要做，服务可能更细粒度，比如输入/输出编码对，比如“H264 1080p -> 720p”。
@@ -149,7 +149,7 @@ Streamflow expands the role of the Service Registry in the on chain protocol. Or
 ### Offchain谈判工作
 从链上作业分配到链外作业协商的转变可能是Streamflow提出的最大变化。它改变了严格按照利害关系来路由工作的假设，下面的分析部分将对此进行分析，但是它也带来了巨大的好处。即:
 
-* **可用性** - 广播公司将能够确保在与管弦乐编曲人员签订合同之前，管弦乐编曲人员是可用的。
+* **可用性** - 广播公司将能够确保在与协调器员签订合同之前，协调器是可用的。
 * **冗余** - 如果在作业之前或期间某个编排器不可用，只需切换到另一个编排器即可。或者为了冗余而首先使用多个协调器。
 * **速度** - 立即开始工作。没有必要等待on chain的确认。
 * **成本效益** - 验证者验证广播器的on-chain PM store，如果存储级别足够，则执行将编码段发送回广播器的工作。
@@ -180,7 +180,7 @@ Streamflow expands the role of the Service Registry in the on chain protocol. Or
 ### 概率小额支付
 流对成本节约的最大影响将来自这个概率微支付(PM)提议。以前，协议使用deposit() -> job() -> claim() -> verify() -> distributeFees()事务流来释放执行工作的付款。平均每1000个视频片段(或更多)需要执行其中的最后三个事务，而在短时间内执行5个事务对代码转换器来说成本太高。
 
-关于PM的背景，建议回顾一下Orchid协议团队的一篇关于它在分散式VPN网络中的使用的文章，以及之前的学术研究[[3,4,5](#references)]。总结是，广播公司向协调器发出已签名的票证和工作的每个部分。如果彩票“赢了”，那么它的面值就会很高，这就允许编配者以这么高的金额在链条上兑现它。然而，it中奖的可能性非常低，所以每张彩票的期望值都是广播员和编导达成一致的价格/片段。从长远来看，广播公司将几乎完全按照他们同意的每一段向管弦乐编曲者支付费用，而管弦乐编曲者将几乎完全按照他们所做的工作的正确金额支付费用，这取决于工作的可能性。
+关于PM的背景，建议回顾一下Orchid协议团队的一篇关于它在分散式VPN网络中的使用的文章，以及之前的学术研究[[3,4,5](#references)]。总结是，广播公司向协调器发出已签名的票证和工作的每个部分。如果彩票“赢了”，那么它的面值就会很高，这就允许编配者以这么高的金额在链条上兑现它。然而，it中奖的可能性非常低，所以每张彩票的期望值都是广播员和编导达成一致的价格/片段。从长远来看，广播公司将几乎完全按照他们同意的每一段向转码器支付费用，而转码器将几乎完全按照他们所做的工作的正确金额支付费用，这取决于工作的可能性。
 
 通过使用PM，收集支付的成本可以是单个轻量级事务的成本，并且收集到的支付金额可以有效地批量处理为编排器愿意兑现的任何金额。例如，协调器总是可以以ETH的10美元现金支付，而由于gas价格导致的票面兑现成本可能是0.10美元，而开销只有1%。如果gas价格上涨10倍，协调者可以用现金支付100美元，保持1%的管理费用不变，或者他们可以吸收更多的管理费用，如果他们想要有竞争力的话。与推动许多流建议更新的理念相适应，它将是市场驱动的，并且客户端可配置，而不是强制执行协议。
 
@@ -301,7 +301,7 @@ Livepeer代币(LPT)总是可以描述为工作代币。那些赌上它的人有�
 
 ### 广播双重缓解
 
-在概率性的小额支付方案中，总是存在这样一种可能性，即广播公司发行的中奖彩票数量超过了(意外)他们需要支付的余额。由于管弦乐编曲家可能不会立即通知广播公司中奖的消息，因此很难准确计算广播公司的余额。我们正在继续研究所需的参数和存款管理，以避免在网络的各种使用模式下意外的重复支出。请参阅概率微支付附录中的进一步分析。
+在概率性的小额支付方案中，总是存在这样一种可能性，即广播公司发行的中奖彩票数量超过了(意外)他们需要支付的余额。由于协调器可能不会立即通知广播公司中奖的消息，因此很难准确计算广播公司的余额。我们正在继续研究所需的参数和存款管理，以避免在网络的各种使用模式下意外的重复支出。请参阅概率微支付附录中的进一步分析。
 
 ### 视频付款
 
